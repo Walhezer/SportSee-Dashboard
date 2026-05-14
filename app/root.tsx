@@ -9,7 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 
-// Chargement des polices standard
+
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -23,7 +23,7 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-// Le squelette HTML de ton application
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
@@ -42,12 +42,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Le point d'entrée qui affiche tes pages (Login, Dashboard, etc.)
+
 export default function App() {
   return <Outlet />;
 }
 
-// Gestion automatique des erreurs (notamment la 404 demandée à l'étape 3)
+
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
   let details = "Une erreur inattendue est survenue.";
