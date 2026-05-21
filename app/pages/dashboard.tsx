@@ -1,3 +1,4 @@
+import { Link } from "react-router"; 
 import { useUser } from "~/context/UserContext";
 import DailyActivity from "~/components/DailyActivity";
 import KmAverage from "~/components/KmAverage";
@@ -61,8 +62,8 @@ export default function Dashboard() {
           </div>
 
           <nav className={styles.navBubble}>
-            <a href="#dashboard" className={styles.navLinkActive}>Dashboard</a>
-            <a href="#profil" className={styles.navLink}>Mon profil</a>
+            <Link to="/dashboard" className={styles.navLink}>Dashboard</Link>
+            <Link to="/profil" className={styles.navLinkActive}>Mon profil</Link>
             <span className={styles.navSeparator}>|</span>
             <button className={styles.logoutButton}>Se déconnecter</button>
           </nav>

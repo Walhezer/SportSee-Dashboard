@@ -22,7 +22,7 @@ export default function ScoreProgress({ score, total }: ScoreProgressProps) {
   ];
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "200px" }}>
+   <div style={{ position: "relative", width: "100%", height: "200px", minHeight: "200px", minWidth: "200px" }}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie

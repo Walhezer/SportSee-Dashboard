@@ -1,0 +1,205 @@
+
+.mainContainer {
+  background-color: #F8F9FE;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contentWrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logoIcon {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 24px;
+}
+
+.logoBarRed1 { width: 4px; height: 12px; background-color: #FF2D00; border-radius: 2px; }
+.logoBarRed2 { width: 4px; height: 20px; background-color: #FF2D00; border-radius: 2px; }
+.logoBarBlue1 { width: 4px; height: 16px; background-color: #0038FF; border-radius: 2px; }
+.logoBarBlue2 { width: 4px; height: 24px; background-color: #0038FF; border-radius: 2px; }
+
+.logoText {
+  font-weight: bold;
+  font-size: 24px;
+  color: #0038FF;
+  letter-spacing: -0.5px;
+}
+
+.logoTextSpan {
+  color: #FF2D00;
+}
+
+.navBubble {
+  background-color: #FFFFFF;
+  padding: 12px 24px;
+  border-radius: 24px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navLink {
+  text-decoration: none;
+  color: #7A7A7A;
+  font-size: 14px;
+}
+
+.navLinkActive {
+  text-decoration: none;
+  color: #2B2B2B;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.navSeparator {
+  color: #E0E0E0;
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  color: #0038FF;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  background-color: #FFFFFF;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  background-color: #E5ECFF;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  color: #0038FF;
+  font-weight: bold;
+}
+
+.userName {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: #2B2B2B;
+}
+
+.userSub {
+  font-size: 14px;
+  color: #7A7A7A;
+  margin: 4px 0 0 0;
+}
+
+.columnsContainer {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.leftColumn {
+  flex: 4;
+}
+
+.rightColumn {
+  flex: 6;
+}
+
+.profileInfoBlock {
+  background-color: #FFFFFF;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.profileInfoTitle {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0 0 24px 0;
+  color: #2B2B2B;
+}
+
+.profileLine {
+  font-size: 15px;
+  color: #7A7A7A;
+  margin: 16px 0;
+}
+
+.statsSectionTitle {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0 0 4px 0;
+  color: #2B2B2B;
+}
+
+.statsSectionSubtitle {
+  font-size: 14px;
+  color: #7A7A7A;
+  margin: 0 0 24px 0;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.statCard {
+  background-color: #0038FF; /* Fond bleu électrique de la maquette */
+  padding: 24px;
+  border-radius: 12px;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100px;
+}
+
+.statLabel {
+  font-size: 13px;
+  opacity: 0.9;
+  margin: 0 0 16px 0;
+}
+
+.statValue {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.statUnit {
+  font-size: 14px;
+  font-weight: normal;
+  opacity: 0.8;
+}

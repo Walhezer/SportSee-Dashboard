@@ -3,5 +3,6 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes";
 export default [
   index("pages/login.tsx"), 
   route("dashboard", "pages/dashboard.tsx"),
+  route("profil", "pages/profil.tsx"),
   route("*", "pages/notfound.tsx"),
 ] satisfies RouteConfig;
