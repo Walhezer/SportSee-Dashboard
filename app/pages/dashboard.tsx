@@ -18,8 +18,19 @@ export default function Dashboard() {
   // Route guarding: redirect or block access if user session context is missing
   if (!user) {
     return (
-      <main style={{ padding: "40px", textAlign: "center" }}>
-        <p>Veuillez d'abord vous connecter sur la page d'accueil.</p>
+      <main className={styles.errorMain}>
+        <div className={styles.errorModal}>
+          <h2 className={styles.errorTitle}>
+            Session expirée
+          </h2>
+          <p className={styles.errorText}>
+            Votre session a expiré suite à une période d'inactivité, ou vous n'êtes pas connecté. Veuillez vous reconnecter pour accéder à votre tableau de bord.
+          </p>
+
+          <Link to="/" className={styles.errorButton}>
+            Retour à la connexion
+          </Link>
+        </div>
       </main>
     );
   }
@@ -107,36 +118,36 @@ export default function Dashboard() {
           </div>
         </div>
 
-      {/* Analytics Section - Row 2: Weekly Goals Progress & Macro KPI blocks */}
-      <h2 className={styles.sectionTitle}>Cette semaine</h2>
-      <div className={styles.rowContainer}>
-        <div className={styles.cardLeftBottom}>
-          <div>
-            <h3 className={styles.cardLeftBottomTitle}>
-              Score Global
-            </h3>
-            <p className={styles.cardLeftBottomSubtitle}>Avancement de votre objectif</p>
+        {/* Analytics Section - Row 2: Weekly Goals Progress & Macro KPI blocks */}
+        <h2 className={styles.sectionTitle}>Cette semaine</h2>
+        <div className={styles.rowContainer}>
+          <div className={styles.cardLeftBottom}>
+            <div>
+              <h3 className={styles.cardLeftBottomTitle}>
+                Score Global
+              </h3>
+              <p className={styles.cardLeftBottomSubtitle}>Avancement de votre objectif</p>
+            </div>
+            <ScoreProgress score={userScore} total={1} />
           </div>
-          <ScoreProgress score={userScore} total={1} />
+
+          <div className={styles.statsRightContainer}>
+            <div className={styles.textStatCard}>
+              <p className={styles.textStatLabel}>Temps Total</p>
+              <p className={styles.textStatValue}>
+                {stats.totalDuration || 0} <span className={styles.textStatUnitBlue}>min</span>
+              </p>
+            </div>
+            <div className={styles.textStatCard}>
+              <p className={styles.textStatLabel}>Poids Actuel</p>
+              <p className={styles.textStatValue}>
+                {profile.weight || 0} <span className={styles.textStatUnitRed}>kg</span>
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className={styles.statsRightContainer}>
-          <div className={styles.textStatCard}>
-            <p className={styles.textStatLabel}>Temps Total</p>
-            <p className={styles.textStatValue}>
-              {stats.totalDuration || 0} <span className={styles.textStatUnitBlue}>min</span>
-            </p>
-          </div>
-          <div className={styles.textStatCard}>
-            <p className={styles.textStatLabel}>Poids Actuel</p>
-            <p className={styles.textStatValue}>
-              {profile.weight || 0} <span className={styles.textStatUnitRed}>kg</span>
-            </p>
-          </div>
-        </div>
       </div>
-
-    </div>
     </div >
   );
 }
