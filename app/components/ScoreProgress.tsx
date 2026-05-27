@@ -1,9 +1,7 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 interface ScoreProgressProps {
-  /** Number of sessions completed by the user */
   score: number;
-  /** Total targeted target session count */
   total: number;
 }
 
@@ -12,10 +10,10 @@ interface ScoreProgressProps {
  * Employs absolute center-positioning for the text node overlay.
  */
 export default function ScoreProgress({ score, total }: ScoreProgressProps) {
-  const percentage = Math.round((score / total) * 100);
-  const remaining = total - score;
+  // Ensuring percentage calculation handles the new data structure
+  const percentage = Math.round(score * 100);
+  const remaining = 1 - score;
 
-  // PieChart structural modeling data
   const data = [
     { name: "Réalisé", value: score, color: "#0038FF" },
     { name: "Restant", value: remaining, color: "#F2F4FA" },
@@ -32,9 +30,9 @@ export default function ScoreProgress({ score, total }: ScoreProgressProps) {
             cy="50%"
             innerRadius={70}
             outerRadius={85}
-            startAngle={90}   // Math rotation anchor: starts at 12 o'clock position
-            endAngle={-270}  // Forces clockwise layout progression
-            cornerRadius={10} // Applies modern rounded edges to ring slices
+            startAngle={90}
+            endAngle={450} // Fixed angle for full circle logic
+            cornerRadius={10}
           >
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
@@ -43,7 +41,6 @@ export default function ScoreProgress({ score, total }: ScoreProgressProps) {
         </PieChart>
       </ResponsiveContainer>
 
-      {/* Absolutely centered absolute layer mapping the structural progress percentage label */}
       <div
         style={{
           position: "absolute",
