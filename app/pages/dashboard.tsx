@@ -1,5 +1,7 @@
-import { Link } from "react-router"; 
+import { Link } from "react-router";
 import { useUser } from "~/context/UserContext";
+import { useFetch } from "~/hooks/useFetch";
+import { getAllUserData } from "~/services/api";
 import DailyActivity from "~/components/DailyActivity";
 import KmAverage from "~/components/KmAverage";
 import ScoreProgress from "~/components/ScoreProgress";
@@ -21,26 +23,27 @@ export default function Dashboard() {
       </main>
     );
   }
+  // Fetch all user metrics from the API using the authenticated user ID
+  const { data, isLoading, error } = useFetch(getAllUserData, []);
 
-  // TODO: Replace with dynamic API/Mock data fetching service (Step 6 implementation)
-  // Temporary dataset formatted specifically to meet Recharts component expectations
-  const tempActivityData = [
-    { day: "Lun", minBpm: 138, maxBpm: 163, avgBpm: 163 },
-    { day: "Mar", minBpm: 140, maxBpm: 165, avgBpm: 165 },
-    { day: "Mer", minBpm: 145, maxBpm: 168, avgBpm: 166 },
-    { day: "Jeu", minBpm: 140, maxBpm: 166, avgBpm: 164 },
-    { day: "Ven", minBpm: 135, maxBpm: 165, avgBpm: 165 },
-    { day: "Sam", minBpm: 142, maxBpm: 162, avgBpm: 161 },
-    { day: "Dim", minBpm: 135, maxBpm: 165, avgBpm: 164 },
-  ];
+  // Handle API loading and error states
+  if (isLoading) return <div style={{ padding: "40px", textAlign: "center" }}>Chargement de vos indicateurs...</div>;
+  if (error || !data) return <div style={{ padding: "40px", textAlign: "center", color: "red" }}>Erreur de chargement des données depuis le serveur.</div>;
+  // Extract backend data
+  const { main, activity } = data;
 
-  // TODO: Replace with structured domain model mapped from user history endpoint
-  const tempKmData = [
-    { session: "S1", kilometers: 20 },
-    { session: "S2", kilometers: 24 },
-    { session: "S3", kilometers: 15 },
-    { session: "S4", kilometers: 28 },
-  ];
+  //The activity API returns an array
+  const activityData = Array.isArray(activity) ? activity : [];
+
+
+  // Securing access to data from the new API
+  const profile = main?.profile || {};
+  const stats = main?.statistics || {};
+  const firstName = profile.firstName || "Utilisateur";
+  const lastName = profile.lastName || "";
+
+  // Le nouveau backend ne renvoie plus de score, on fixe une valeur factice pour le graphique
+  const userScore = 0.65;
 
   return (
     <div className={styles.mainContainer}>
@@ -72,71 +75,68 @@ export default function Dashboard() {
         {/* User Profile Summary Panel */}
         <section className={styles.profileSection}>
           <div className={styles.profileAvatar}>
-            {user.userInfos.firstName[0]}
+            {firstName[0]}
           </div>
           <div>
             <h1 className={styles.profileName}>
-              {user.userInfos.firstName} {user.userInfos.lastName}
+              Bonjour <span className={styles.firstNameSpan}>{firstName}</span> {lastName}
             </h1>
             <div className={styles.profileStatsGroup}>
               <div>
-                <span className={styles.profileStatLabel}>Distance totale : </span>
-                <span className={styles.profileStatValueBlue}>87,4 km</span>
+                <span className={styles.profileStatLabel}>Distance Totale : </span>
+                <span className={styles.profileStatValueBlue}>{stats.totalDistance || 0} km</span>
               </div>
               <div>
-                <span className={styles.profileStatLabel}>Cette semaine : </span>
-                <span className={styles.profileStatValueRed}>21,7 km</span>
+                <span className={styles.profileStatLabel}>Sessions Totales : </span>
+                <span className={styles.profileStatValueRed}>{stats.totalSessions || 0}</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Analytics Section - Row 1: Activity & Heart Rate Metrics (40% / 60% fluid layout split) */}
+        {/* Analytics Section - Row 1: Activity & Heart Rate Metrics */}
         <h2 className={styles.sectionTitle}>Vos dernières performances</h2>
         <div className={`${styles.rowContainer} ${styles.mb32}`}>
+
           <div className={styles.cardLeft}>
-            <div>
-              <h3 className={styles.cardLeftTitle}>18km en moyenne</h3>
-              <p className={styles.cardLeftSubtitle}>Total des kilomètres 4 dernières semaines</p>
-            </div>
-            <KmAverage kmData={tempKmData} />
+            <KmAverage kmData={activityData} />
           </div>
 
           <div className={styles.cardRight}>
-            <DailyActivity activityData={tempActivityData} />
+            <DailyActivity activityData={activityData} />
           </div>
         </div>
 
-        {/* Analytics Section - Row 2: Weekly Goals Progress & Time/Distance KPI blocks */}
-        <h2 className={styles.sectionTitle}>Cette semaine</h2>
-        <div className={styles.rowContainer}>
-          <div className={styles.cardLeftBottom}>
-            <div>
-              <h3 className={styles.cardLeftBottomTitle}>
-                <span className={styles.profileStatValueBlue} style={{ fontSize: "20px" }}>x4</span> sur objectif de 6
-              </h3>
-              <p className={styles.cardLeftBottomSubtitle}>Courses hebdomadaires réalisées</p>
-            </div>
-            <ScoreProgress score={4} total={6} />
+      {/* Analytics Section - Row 2: Weekly Goals Progress & Macro KPI blocks */}
+      <h2 className={styles.sectionTitle}>Cette semaine</h2>
+      <div className={styles.rowContainer}>
+        <div className={styles.cardLeftBottom}>
+          <div>
+            <h3 className={styles.cardLeftBottomTitle}>
+              Score Global
+            </h3>
+            <p className={styles.cardLeftBottomSubtitle}>Avancement de votre objectif</p>
           </div>
-
-          <div className={styles.statsRightContainer}>
-            <div className={styles.textStatCard}>
-              <p className={styles.textStatLabel}>Durée d'activité</p>
-              <p className={styles.textStatValue}>
-                140 <span className={styles.textStatUnitBlue}>minutes</span>
-              </p>
-            </div>
-            <div className={styles.textStatCard}>
-              <p className={styles.textStatLabel}>Distance</p>
-              <p className={styles.textStatValue}>
-                21.7 <span className={styles.textStatUnitRed}>kilomètres</span>
-              </p>
-            </div>
-          </div>
+          <ScoreProgress score={userScore} total={1} />
         </div>
 
+        <div className={styles.statsRightContainer}>
+          <div className={styles.textStatCard}>
+            <p className={styles.textStatLabel}>Temps Total</p>
+            <p className={styles.textStatValue}>
+              {stats.totalDuration || 0} <span className={styles.textStatUnitBlue}>min</span>
+            </p>
+          </div>
+          <div className={styles.textStatCard}>
+            <p className={styles.textStatLabel}>Poids Actuel</p>
+            <p className={styles.textStatValue}>
+              {profile.weight || 0} <span className={styles.textStatUnitRed}>kg</span>
+            </p>
+          </div>
+        </div>
       </div>
+
     </div>
+    </div >
   );
 }
