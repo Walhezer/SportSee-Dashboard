@@ -4,6 +4,7 @@ import { useFetch } from "~/hooks/useFetch";
 import { USE_MOCK } from '../services/config';
 import { getUserActivity, getUserMainData } from '../services/api';
 import { getUserActivityMock, getUserMainDataMock } from '../services/mockApi';
+import Header from "../components/header"; 
 import DailyActivity from "~/components/DailyActivity";
 import KmAverage from "~/components/KmAverage";
 import ScoreProgress from "~/components/ScoreProgress";
@@ -19,8 +20,8 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    setUser(null); 
-    navigate("/"); 
+    setUser(null);
+    navigate("/");
   };
 
   // Route guarding: redirect or block access if user session context is missing
@@ -62,7 +63,7 @@ export default function Dashboard() {
   // Handle API loading and error states
   if (isLoading) return <div style={{ padding: "40px", textAlign: "center" }}>Chargement de vos indicateurs...</div>;
   if (error || !data) return <div style={{ padding: "40px", textAlign: "center", color: "red" }}>Erreur de chargement des données depuis le serveur.</div>;
-  
+
   // Extract backend data
   const { main, activity } = data;
 
@@ -84,47 +85,32 @@ export default function Dashboard() {
       <div className={styles.contentWrapper}>
 
         {/* Top Header: Branding Logo & Profile Navigation Capsule */}
-        <div className={styles.headerTop}>
-          <div className={styles.logoArea}>
-            <div className={styles.logoIcon}>
-              <div className={styles.logoBarRed1}></div>
-              <div className={styles.logoBarRed2}></div>
-              <div className={styles.logoBarBlue1}></div>
-              <div className={styles.logoBarBlue2}></div>
-            </div>
-            <span className={styles.logoText}>
-              SPORT<span className={styles.logoTextSpan}>SEE</span>
-            </span>
-          </div>
-
-          <nav className={styles.navBubble}>
-            <Link to="/dashboard" className={styles.navLink}>Dashboard</Link>
-            <Link to="/profil" className={styles.navLinkActive}>Mon profil</Link>
-            <span className={styles.navSeparator}>|</span>
-            <button onClick={handleLogout} className={styles.logoutButton}>Se déconnecter</button>
-          </nav>
-        </div>
+       <Header />
 
         {/* User Profile Summary Panel */}
         <section className={styles.profileSection}>
-          <div className={styles.profileAvatar}>
-            {firstName[0]}
-          </div>
-          <div>
-            <h1 className={styles.profileName}>
-              <span className={styles.firstNameSpan}>{firstName}</span> {lastName}
-            </h1>
-            <div className={styles.profileStatsGroup}>
-              <div>
-                <span className={styles.profileStatLabel}>Distance Totale : </span>
-                <span className={styles.profileStatValueBlue}>{stats.totalDistance || 0} km</span>
-              </div>
-              <div>
-                <span className={styles.profileStatLabel}>Sessions Totales : </span>
-                <span className={styles.profileStatValueRed}>{stats.totalSessions || 0}</span>
-              </div>
+
+          <div className={styles.profileInfoWrapper}>
+            <div className={styles.profileAvatar}>
+              {firstName[0]}
+            </div>
+            <div>
+              <h1 className={styles.profileName}>
+                {firstName} {lastName}
+              </h1>
+              <p className={styles.profileSub}>Membre depuis le 14 juin 2023</p>
             </div>
           </div>
+
+          <div className={styles.profileDistanceWrapper}>
+            <span className={styles.profileTotalDistanceLabel}>Distance totale parcourue</span>
+
+            <div className={styles.profileTotalDistanceButton}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              <span className={styles.profileTotalDistanceValue}>{stats.totalDistance || 0} km</span>
+            </div>
+          </div>
+
         </section>
 
         {/* Analytics Section - Row 1: Activity & Heart Rate Metrics */}

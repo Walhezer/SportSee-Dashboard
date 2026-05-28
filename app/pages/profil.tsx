@@ -6,7 +6,7 @@ import { useFetch } from "~/hooks/useFetch";
 import { USE_MOCK } from '../services/config';
 import { getUserMainData } from '../services/api';
 import { getUserMainDataMock } from '../services/mockApi';
-
+import Header from "../components/header"; 
 import styles from "./profil.module.css";
 
 /**
@@ -81,26 +81,7 @@ export default function Profil() {
       <div className={styles.contentWrapper}>
         
         {/* Top Header: Branding & Navigation */}
-        <div className={styles.headerTop}>
-          <div className={styles.logoArea}>
-            <div className={styles.logoIcon}>
-              <div className={styles.logoBarRed1}></div>
-              <div className={styles.logoBarRed2}></div>
-              <div className={styles.logoBarBlue1}></div>
-              <div className={styles.logoBarBlue2}></div>
-            </div>
-            <span className={styles.logoText}>
-              SPORT<span className={styles.logoTextSpan}>SEE</span>
-            </span>
-          </div>
-
-          <nav className={styles.navBubble}>
-            <Link to="/dashboard" className={styles.navLink}>Dashboard</Link>
-            <Link to="/profil" className={styles.navLinkActive}>Mon profil</Link>
-            <span className={styles.navSeparator}>|</span>
-            <button onClick={handleLogout} className={styles.logoutButton}>Se déconnecter</button>
-          </nav>
-        </div>
+       <Header />
 
         {/* Top Section: User Banner */}
         <section className={styles.userCard}>

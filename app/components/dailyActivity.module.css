@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* L'en-tête (identique à KmAverage pour la cohérence) */
+.header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.topRow h2 {
+  color: #FF2D00; /* Rouge SportSee */
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  white-space: nowrap;
+}
+
+.subtitle {
+  color: #7A7A7A;
+  font-size: 14px;
+  margin: 4px 0 0 0;
+}
+
+/* --- Sélecteur de date --- */
+.dateSelector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.arrowButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #EAEAEA;
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2B2B2B;
+}
+
+.dateText {
+  font-size: 14px;
+  color: #2B2B2B;
+}
+
+.chartWrapper {
+  flex: 1;
+  width: 100%;
+  min-height: 300px;
+}
