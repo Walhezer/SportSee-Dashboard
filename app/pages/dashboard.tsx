@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useUser } from "~/context/UserContext";
 import { useFetch } from "~/hooks/useFetch";
 import { USE_MOCK } from '../services/config';
@@ -15,7 +15,13 @@ import styles from "./dashboard.module.css";
  * Aligned to desktop layout constraints (min-width: 1024px).
  */
 export default function Dashboard() {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setUser(null); 
+    navigate("/"); 
+  };
 
   // Route guarding: redirect or block access if user session context is missing
   if (!user) {
@@ -95,7 +101,7 @@ export default function Dashboard() {
             <Link to="/dashboard" className={styles.navLink}>Dashboard</Link>
             <Link to="/profil" className={styles.navLinkActive}>Mon profil</Link>
             <span className={styles.navSeparator}>|</span>
-            <button className={styles.logoutButton}>Se déconnecter</button>
+            <button onClick={handleLogout} className={styles.logoutButton}>Se déconnecter</button>
           </nav>
         </div>
 
