@@ -1,3 +1,5 @@
+import type { ActivityDetail } from "../models/types";
+
 const BASE_URL = "http://localhost:8000/api";
 
 /**
@@ -6,7 +8,7 @@ const BASE_URL = "http://localhost:8000/api";
  */
 export function getAuthHeaders(): HeadersInit {
   const token = typeof window !== "undefined" ? localStorage.getItem("sportsee_token") : null;
-  
+
   return {
     "Content-Type": "application/json",
     // Le backend exige le token pour débloquer l'accès aux données
@@ -31,17 +33,25 @@ export async function getUserMainData() {
  * Fetches user daily activity data.
  * Le nouveau backend exige des dates de début et de fin.
  */
-export async function getUserActivity() {
-  // Dates adaptées pour matcher avec tes données mockées (Janvier 2025)
+export async function getUserActivity(): Promise<ActivityDetail[]> {
   const startWeek = "2025-01-01";
   const endWeek = "2030-12-31";
+
+  const response = await fetch(
+    `${BASE_URL}/user-activity?startWeek=${startWeek}&endWeek=${endWeek}`,
+    {
+      method: "GET",
+      headers: getAuthHeaders(),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch activity data: ${response.status}`);
+  }
+
+  const data = await response.json();
   
-  const response = await fetch(`${BASE_URL}/user-activity?startWeek=${startWeek}&endWeek=${endWeek}`, {
-    method: "GET",
-    headers: getAuthHeaders(),
-  });
-  if (!response.ok) throw new Error(`Failed to fetch activity data: ${response.status}`);
-  return await response.json();
+  return data as ActivityDetail[];
 }
 
 /**

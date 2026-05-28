@@ -15,6 +15,22 @@ export interface UserProfile {
   };
 }
 
+export interface HeartRateData {
+  min: number;
+  max: number;
+  average: number;
+}
+
+export interface ActivityDetail {
+  date: string;
+  distance: number;
+  duration: number;
+  heartRate: HeartRateData;
+  caloriesBurned: number;
+}
+
+
+// Obsolète, a supprimer
 export interface UserActivity {
   userId: number | string;
   sessions: {

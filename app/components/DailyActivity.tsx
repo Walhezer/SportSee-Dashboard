@@ -9,20 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-
-interface HeartRateData {
-  min: number;
-  max: number;
-  average: number;
-}
-
-interface ActivityDetail {
-  date: string;
-  distance: number;
-  duration: number;
-  heartRate: HeartRateData;
-  caloriesBurned: number;
-}
+import type { ActivityDetail } from "../models/types";
 
 interface DailyActivityProps {
   activityData: ActivityDetail[];

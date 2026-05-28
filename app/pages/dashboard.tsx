@@ -1,7 +1,9 @@
 import { Link } from "react-router";
 import { useUser } from "~/context/UserContext";
 import { useFetch } from "~/hooks/useFetch";
-import { getAllUserData } from "~/services/api";
+import { USE_MOCK } from '../services/config';
+import { getUserActivity, getUserMainData } from '../services/api';
+import { getUserActivityMock, getUserMainDataMock } from '../services/mockApi';
 import DailyActivity from "~/components/DailyActivity";
 import KmAverage from "~/components/KmAverage";
 import ScoreProgress from "~/components/ScoreProgress";
@@ -34,18 +36,32 @@ export default function Dashboard() {
       </main>
     );
   }
-  // Fetch all user metrics from the API using the authenticated user ID
-  const { data, isLoading, error } = useFetch(getAllUserData, []);
+
+  // Switch
+  const fetchDashboardData = async () => {
+    if (USE_MOCK) {
+      const main = await getUserMainDataMock();
+      const activity = await getUserActivityMock();
+      return { main, activity };
+    } else {
+      const main = await getUserMainData();
+      const activity = await getUserActivity();
+      return { main, activity };
+    }
+  };
+
+  // Fetch all user metrics using our switch function
+  const { data, isLoading, error } = useFetch(fetchDashboardData, []);
 
   // Handle API loading and error states
   if (isLoading) return <div style={{ padding: "40px", textAlign: "center" }}>Chargement de vos indicateurs...</div>;
   if (error || !data) return <div style={{ padding: "40px", textAlign: "center", color: "red" }}>Erreur de chargement des données depuis le serveur.</div>;
+  
   // Extract backend data
   const { main, activity } = data;
 
-  //The activity API returns an array
+  // The activity API returns an array
   const activityData = Array.isArray(activity) ? activity : [];
-
 
   // Securing access to data from the new API
   const profile = main?.profile || {};
@@ -90,7 +106,7 @@ export default function Dashboard() {
           </div>
           <div>
             <h1 className={styles.profileName}>
-              Bonjour <span className={styles.firstNameSpan}>{firstName}</span> {lastName}
+              <span className={styles.firstNameSpan}>{firstName}</span> {lastName}
             </h1>
             <div className={styles.profileStatsGroup}>
               <div>
