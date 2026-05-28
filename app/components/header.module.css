@@ -25,13 +25,9 @@
 
 .logoText {
   font-weight: bold;
-  font-size: 24px;
+  font-size: 30px;
   color: #0038FF;
   letter-spacing: -0.5px;
-}
-
-.logoTextSpan {
-  color: #FF2D00;
 }
 
 .navBubble {

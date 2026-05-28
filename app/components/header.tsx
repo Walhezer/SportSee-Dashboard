@@ -12,8 +12,7 @@ export default function Header() {
           <div className={styles.logoBarBlue2}></div>
         </div>
         <span className={styles.logoText}>
-          SPORT<span className={styles.logoTextSpan}>SEE</span>
-        </span>
+          SPORTSEE</span>
       </div>
 
       <nav className={styles.navBubble}>
