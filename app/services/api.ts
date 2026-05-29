@@ -1,4 +1,4 @@
-import type { ActivityDetail } from "../models/types";
+import type { ActivityDetail, UserProfile } from "../models/types";
 
 const BASE_URL = "http://localhost:8000/api";
 
@@ -18,15 +18,45 @@ export function getAuthHeaders(): HeadersInit {
 
 /**
  * Fetches core user profile overview data.
- * Plus besoin d'ID dans l'URL, le token JWT suffit !
+ * Inclut un Mapper pour structurer la donnée brute du backend vers l'interface UserProfile.
  */
-export async function getUserMainData() {
+export async function getUserMainData(): Promise<UserProfile> {
   const response = await fetch(`${BASE_URL}/user-info`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
+  
   if (!response.ok) throw new Error(`Failed to fetch main data: ${response.status}`);
-  return await response.json();
+  
+  const rawData = await response.json();
+
+  // On gère le cas où l'API englobe tout dans un objet "data" (très fréquent sur SportSee)
+  const source = rawData.data ? rawData.data : rawData;
+
+  // LE MAPPER BLINDÉ : Il cherche le nouveau format, OU l'ancien format en secours
+  const profileData = source.profile || source.userInfos || {};
+  const statsData = source.statistics || source.keyData || {};
+
+  return {
+    profile: {
+      firstName: profileData.firstName || "Utilisateur",
+      lastName: profileData.lastName || "",
+      age: profileData.age || 0,
+      gender: profileData.gender,
+      profilePicture: profileData.profilePicture || "",
+      height: profileData.height,
+      weight: profileData.weight,
+      createdAt: profileData.createdAt,
+    },
+    statistics: {
+      totalDistance: statsData.totalDistance || 0,
+      totalDuration: statsData.totalDuration || 0,
+      totalSessions: statsData.totalSessions || 0,
+      // Fallback sur calorieCount pour gérer l'ancien format si besoin
+      calories: statsData.calories || statsData.calorieCount || 0,
+      restDays: statsData.restDays || 0,
+    }
+  };
 }
 
 /**
@@ -55,34 +85,14 @@ export async function getUserActivity(): Promise<ActivityDetail[]> {
 }
 
 /**
- * ⚠️ ATTENTION : Cette route n'existe plus dans le nouveau backend officiel.
- * On renvoie un objet vide pour éviter que le composant React ne crashe.
- */
-export async function getUserAverageSessions() {
-  console.warn("La route average-sessions n'existe plus sur ce backend.");
-  return { sessions: [] };
-}
-
-/**
- * ⚠️ ATTENTION : Cette route n'existe plus dans le nouveau backend officiel.
- * On renvoie un objet vide pour éviter que le composant React ne crashe.
- */
-export async function getUserPerformance() {
-  console.warn("La route performance n'existe plus sur ce backend.");
-  return { data: [], kind: {} };
-}
-
-/**
  * Aggregates all separate user endpoints concurrently into a single dataset promise.
+ * (Nettoyé des routes obsolètes)
  */
 export async function getAllUserData() {
-  // Plus besoin de passer l'ID aux fonctions
-  const [main, activity, sessions, performance] = await Promise.all([
+  const [main, activity] = await Promise.all([
     getUserMainData(),
     getUserActivity(),
-    getUserAverageSessions(),
-    getUserPerformance(),
   ]);
 
-  return { main, activity, sessions, performance };
+  return { main, activity };
 }

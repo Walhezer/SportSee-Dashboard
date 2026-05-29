@@ -2,15 +2,36 @@ import { Link, useNavigate } from "react-router";
 import { useUser } from "~/context/UserContext";
 import { useFetch } from "~/hooks/useFetch";
 
-// Data System Imports
+// Services & Components
 import { USE_MOCK } from '../services/config';
 import { getUserMainData } from '../services/api';
 import { getUserMainDataMock } from '../services/mockApi';
-import Header from "../components/header"; 
+import ProfileHeader from '../components/ProfileHeader';
+import Header from "../components/header";
 import styles from "./profil.module.css";
 
+// --- UTILITY FUNCTIONS ---
+// Extracted outside the component to prevent unnecessary re-creations on every render
+
+/** Formats height from cm to meters (e.g., 165 -> "1m65") */
+const formatHeight = (h?: number): string => {
+  if (!h) return "Non renseignée";
+  const meters = Math.floor(h / 100);
+  const centimeters = h % 100;
+  // padStart ensures "1m05" instead of "1m5" if height is 105cm
+  return `${meters}m${centimeters.toString().padStart(2, '0')}`;
+};
+
+/** Converts total minutes into hours and minutes */
+const formatDuration = (totalMinutes?: number) => {
+  if (!totalMinutes) return { hours: 0, mins: 0 };
+  const hours = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+  return { hours, mins };
+};
+
 /**
- * Component page for the user profile.
+ * User Profile Component
  * Displays personal details and aggregated training metrics.
  * Aligned to the 1024px desktop design requirements.
  */
@@ -18,18 +39,16 @@ export default function Profil() {
   const { user, setUser } = useUser();
   const navigate = useNavigate();
 
-  // Route guarding: redirect or block access if user session context is missing
+  // --- 1. ROUTE GUARDING ---
+  // Redirect or block access if user session context is missing
   if (!user) {
     return (
       <main className={styles.errorMain}>
         <div className={styles.errorModal}>
-          <h2 className={styles.errorTitle}>
-            Session expirée
-          </h2>
+          <h2 className={styles.errorTitle}>Session expirée</h2>
           <p className={styles.errorText}>
             Votre session a expiré suite à une période d'inactivité, ou vous n'êtes pas connecté. Veuillez vous reconnecter pour accéder à votre profil.
           </p>
-
           <Link to="/" className={styles.errorButton}>
             Retour à la connexion
           </Link>
@@ -38,13 +57,14 @@ export default function Profil() {
     );
   }
 
-  // Logout handler
+  // Handle user logout
   const handleLogout = () => {
     setUser(null);
     navigate("/");
   };
 
-  // Data Source Switch: API vs Mock
+  // --- 2. DATA FETCHING ---
+  // Passes the current user.id to ensure we fetch the correct profile
   const fetchProfileData = async () => {
     if (USE_MOCK) {
       return await getUserMainDataMock();
@@ -55,67 +75,73 @@ export default function Profil() {
 
   const { data, isLoading, error } = useFetch(fetchProfileData, []);
 
-  // Loading and error state handling
+  // --- 3. LOADING & ERROR STATES ---
   if (isLoading) return <div style={{ padding: "40px", textAlign: "center" }}>Chargement de votre profil...</div>;
   if (error || !data) return <div style={{ padding: "40px", textAlign: "center", color: "red" }}>Erreur de chargement des données depuis le serveur.</div>;
 
-  // Safe data extraction with fallbacks
-  const userInfos = data?.userInfos || {};
-  const keyData = data?.keyData || {};
-  
-  const firstName = userInfos.firstName || "Utilisateur";
-  const lastName = userInfos.lastName || "";
-  const age = userInfos.age || "--";
-  const calories = keyData.calorieCount || 0;
+  // --- 4. DATA EXTRACTION & FORMATTING ---
+  // Safe extraction with fallbacks
+  const userProfile = data.profile || {};
+  const userStats = data.statistics || {};
+  // Formatted Profile Details
+  const firstName = userProfile.firstName || "Utilisateur";
+  const lastName = userProfile.lastName || "";
+  const profilePicture = userProfile.profilePicture || "";
+  const age = userProfile.age ? `${userProfile.age} ans` : "-- ans";
+  const weight = userProfile.weight ? `${userProfile.weight}kg` : "Non renseigné";
+  const height = formatHeight(userProfile.height);
+  const memberSince = "14 juin 2023"; // Static fallback as per mockup requirements
+  const rawGender = userProfile.gender?.toLowerCase() || "";
 
-  // Fallback data for fields not provided by the new SportSee API
-  const profileDetails = {
-    gender: "Non renseigné",
-    height: "1m68", 
-    weight: "58kg",
-    memberSince: "14 juin 2023"
-  };
+  let gender = "Non renseigné";
+  if (rawGender.startsWith("f")) {
+    gender = "Femme";
+  }
+  else if (rawGender.startsWith("m") || rawGender.startsWith("h")) {
+    gender = "Homme";
+  }
+  // Formatted Global Statistics
+  const duration = formatDuration(userStats.totalDuration);
+  const distance = userStats.totalDistance ? Math.round(Number(userStats.totalDistance)) : 0;
+  const sessions = userStats.totalSessions || 0;
+  const calories = userStats.calories || 0;
+  const restDays = userStats.restDays || 0;
 
   return (
     <div className={styles.mainContainer}>
       <div className={styles.contentWrapper}>
-        
+
         {/* Top Header: Branding & Navigation */}
-       <Header />
+        <Header />
 
         {/* Top Section: User Banner */}
-        <section className={styles.userCard}>
-          <div className={styles.avatar}>
-            {firstName[0]}
-          </div>
-          <div>
-            <h1 className={styles.userName}>
-              {firstName} {lastName}
-            </h1>
-            <p className={styles.userSub}>Membre depuis le {profileDetails.memberSince}</p>
-          </div>
-        </section>
+        <ProfileHeader
+          firstName={firstName || "Utilisateur"}
+          lastName={lastName || ""}
+          profilePicture={profilePicture || ""}
+          showDistance={false}
+        />
 
         {/* Main Body: Two-Column Layout */}
         <div className={styles.columnsContainer}>
-          
+
           {/* Left Column: Personal Information */}
           <section className={styles.leftColumn}>
             <div className={styles.profileInfoBlock}>
               <h2 className={styles.profileInfoTitle}>Votre profil</h2>
               <hr style={{ border: "none", height: "1px", backgroundColor: "#EAEAEA", margin: "0 0 20px 0" }} />
-              
+
               <p className={styles.profileLine}>
-                <strong>Âge :</strong> {age} ans
+                <strong>Âge :</strong> {age}
               </p>
               <p className={styles.profileLine}>
-                <strong>Genre :</strong> {profileDetails.gender}
+                <strong>Genre :</strong> {gender}
               </p>
               <p className={styles.profileLine}>
-                <strong>Taille :</strong> {profileDetails.height}
+                <strong>Taille :</strong> {height}
               </p>
               <p className={styles.profileLine}>
-                <strong>Poids :</strong> {profileDetails.weight}
+                <strong>Poids :</strong> {weight}
               </p>
             </div>
           </section>
@@ -123,10 +149,10 @@ export default function Profil() {
           {/* Right Column: Global Statistics Grid */}
           <section className={styles.rightColumn}>
             <h2 className={styles.statsSectionTitle}>Vos statistiques</h2>
-            <p className={styles.statsSectionSubtitle}>depuis le {profileDetails.memberSince}</p>
+            <p className={styles.statsSectionSubtitle}>depuis le {memberSince}</p>
 
             <div className={styles.statsGrid}>
-              
+
               <div className={styles.statCard}>
                 <p className={styles.statLabel}>Temps total couru</p>
                 <p className={styles.statValue}>

@@ -1,18 +1,28 @@
 import styles from './profileHeader.module.css';
 import tagIcon from '../assets/tag.svg';
 
+// 1. On déclare nos propriétés attendues
 interface ProfileHeaderProps {
   firstName: string;
   lastName: string;
   profilePicture: string; 
-  totalDistance: number;
+  totalDistance?: number;
+  showDistance?: boolean;
 }
 
-export default function ProfileHeader({ firstName, lastName, profilePicture, totalDistance }: ProfileHeaderProps) {
+// 2. Retrieve the properties
+export default function ProfileHeader({ 
+  firstName, 
+  lastName, 
+  profilePicture, 
+  totalDistance, 
+  showDistance = true 
+}: ProfileHeaderProps) {
+  
   return (
     <section className={styles.profileSection}>
       
-      {/* Bloc gauche : Photo et informations */}
+      {/* LEFT BLOCK (Always displayed) */}
       <div className={styles.profileInfoWrapper}>
         <img 
           src={profilePicture}
@@ -27,15 +37,17 @@ export default function ProfileHeader({ firstName, lastName, profilePicture, tot
         </div>
       </div>
 
-      {/* Bloc droite : Distance */}
-      <div className={styles.profileDistanceWrapper}>
-        <span className={styles.profileTotalDistanceLabel}>Distance totale parcourue</span>
-        
-        <div className={styles.profileTotalDistanceButton}>
-          <img src={tagIcon} alt="Icône distance" className={styles.profileTotalDistanceIcon} />
-          <span className={styles.profileTotalDistanceValue}>{totalDistance || 0} km</span>
+      {/* RIGHT BLOCK (Displays UNDER CONDITIONS) */}
+      {showDistance && (
+        <div className={styles.profileDistanceWrapper}>
+          <span className={styles.profileTotalDistanceLabel}>Distance totale parcourue</span>
+          
+          <div className={styles.profileTotalDistanceButton}>
+            <img src={tagIcon} alt="Icône distance" className={styles.profileTotalDistanceIcon} />
+            <span className={styles.profileTotalDistanceValue}>{totalDistance || 0} km</span>
+          </div>
         </div>
-      </div>
+      )}
 
     </section>
   );

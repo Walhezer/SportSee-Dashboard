@@ -1,18 +1,20 @@
 export interface UserProfile {
-  id: number | string;
-  userInfos: {
+  profile: {
     firstName: string;
     lastName: string;
     age: number;
+    createdAt: string;
+    height: number;
+    weight: number;
     profilePicture?: string;
+    gender?: string; 
   };
-  todayScore?: number;
-  score?: number;
-  keyData: {
-    calorieCount: number;
-    proteinCount: number;
-    carbohydrateCount: number;
-    lipidCount: number;
+  statistics: {
+    totalDistance: number | string; 
+    totalDuration: number;
+    totalSessions: number;
+    calories?: number;
+    restDays?: number;
   };
 }
 
@@ -28,15 +30,4 @@ export interface ActivityDetail {
   duration: number;
   heartRate: HeartRateData;
   caloriesBurned: number;
-}
-
-
-// Obsolète, a supprimer
-export interface UserActivity {
-  userId: number | string;
-  sessions: {
-    day: string;
-    kilogram: number;
-    calories: number;
-  }[];
 }

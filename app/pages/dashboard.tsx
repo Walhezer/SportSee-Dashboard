@@ -76,6 +76,8 @@ export default function Dashboard() {
   const stats = main?.statistics || {};
   const firstName = profile.firstName || "Utilisateur";
   const lastName = profile.lastName || "";
+  const formattedDistance = stats.totalDistance ? Math.round(Number(stats.totalDistance)) : 0;
+  const pictureUrl = profile.profilePicture || "";
 
   // Le nouveau backend ne renvoie plus de score, on fixe une valeur factice pour le graphique
   const userScore = 0.65;
@@ -92,8 +94,8 @@ export default function Dashboard() {
         <ProfileHeader
           firstName={firstName}
           lastName={lastName}
-          profilePicture={profile.profilePicture || ""}
-          totalDistance={stats.totalDistance}
+          profilePicture={pictureUrl}
+          totalDistance={formattedDistance}
         />
 
         {/* Analytics Section - Row 1: Activity & Heart Rate Metrics */}
