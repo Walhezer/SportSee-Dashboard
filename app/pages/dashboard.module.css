@@ -1,9 +1,9 @@
 .mainContainer {
-  background-color: #F8F9FE;
+  background-color: rgba(242, 243, 255, 1);
   min-height: 100vh;
   width: 100%;
   box-sizing: border-box;
-  font-family: 'Inter', 'Roboto', Helvetica, Arial, sans-serif; 
+  font-family: 'Inter', 'Roboto', Helvetica, Arial, sans-serif;
 }
 
 .contentWrapper {
@@ -33,10 +33,33 @@
   height: 24px;
 }
 
-.logoBarRed1 { width: 4px; height: 12px; background-color: #FF2D00; border-radius: 2px; }
-.logoBarRed2 { width: 4px; height: 20px; background-color: #FF2D00; border-radius: 2px; }
-.logoBarBlue1 { width: 4px; height: 16px; background-color: #0038FF; border-radius: 2px; }
-.logoBarBlue2 { width: 4px; height: 24px; background-color: #0038FF; border-radius: 2px; }
+.logoBarRed1 {
+  width: 4px;
+  height: 12px;
+  background-color: #FF2D00;
+  border-radius: 2px;
+}
+
+.logoBarRed2 {
+  width: 4px;
+  height: 20px;
+  background-color: #FF2D00;
+  border-radius: 2px;
+}
+
+.logoBarBlue1 {
+  width: 4px;
+  height: 16px;
+  background-color: #0038FF;
+  border-radius: 2px;
+}
+
+.logoBarBlue2 {
+  width: 4px;
+  height: 24px;
+  background-color: #0038FF;
+  border-radius: 2px;
+}
 
 .logoText {
   font-weight: bold;
@@ -77,8 +100,8 @@
   color: #0038FF;
 }
 
-.navLinkActive:hover{
-   color: #0038FF;
+.navLinkActive:hover {
+  color: #0038FF;
 }
 
 .navSeparator {
@@ -122,7 +145,7 @@
 
 .profileSub {
   color: #7A7A7A;
-  font-size: 12px; 
+  font-size: 12px;
   margin: 4px 0 0 0;
 }
 
@@ -166,7 +189,7 @@
 }
 
 .profileName {
-  font-size: 20px; 
+  font-size: 20px;
   font-weight: bold;
   margin: 0;
   color: #2B2B2B;
@@ -196,18 +219,26 @@
 }
 
 .sectionTitle {
-  font-size: 20px;
-  font-weight: 600; 
-  margin-top: 48px; 
-  margin-bottom: 24px;
-  color: #2B2B2B;
+  font-size: 22px;
+  font-weight: 500;
+  margin-top: 71px;
+  margin-bottom: 9px;
+  color: rgba(17, 17, 17, 1);
+}
+
+.sectionDate {
+  font-size: 16px;
+  font-style: medium;
+  color: rgba(112, 112, 112, 1);
+  margin-bottom: 32px;
+  font-weight: 500;
 }
 
 .rowContainer {
-  display: flex;
-  gap: 24px;
-  width: 100%;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
 }
 
 .mb32 {
@@ -261,47 +292,58 @@
 }
 
 .statsRightContainer {
-flex: 6;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  justify-content: space-between;
+  flex: 1;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 20px;
 }
 
 .textStatCard {
   background-color: #FFFFFF;
-  padding: 24px 32px;
-  border-radius: 16px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
-  flex: 1; 
+  border-radius: 12px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .textStatLabel {
-  color: #7A7A7A;
   font-size: 14px;
+  font-weight: 400;
+  color: rgba(112, 112, 112, 1);
+  margin: 0 0 15px 0;
+}
+
+/* Valeur en Bleu (140) */
+.textStatValueBlue {
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(11, 35, 244, 1);
   margin: 0;
 }
 
-.textStatValue {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 8px 0 0 0;
-  color: #2B2B2B;
+/* Valeur en Rouge (21.7) */
+.textStatValueRed {
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(244, 50, 11, 1); /* Le rouge de la maquette */
+  margin: 0;
 }
 
-.textStatUnitBlue {
-  color: #0038FF;
-  font-size: 14px;
-  font-weight: normal;
+/* Unité en bleu clair (minutes) */
+.unitBlue {
+  font-size: 16px;
+  font-weight: 500;
+  font-style: medium;
+  color: rgba(182, 189, 252, 1); 
 }
 
-.textStatUnitRed {
-  color: #FF2D00;
-  font-size: 14px;
-  font-weight: normal;
+/* Unité en rouge clair (kilomètres) */
+.unitRed {
+  font-size: 16px;
+  font-weight: 500;
+  font-style: medium;
+  color: rgba(252, 193, 182, 1);
 }
 
 .errorMain {

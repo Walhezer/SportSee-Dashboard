@@ -4,6 +4,7 @@ export interface UserProfile {
     firstName: string;
     lastName: string;
     age: number;
+    profilePicture?: string;
   };
   todayScore?: number;
   score?: number;

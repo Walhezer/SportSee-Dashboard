@@ -4,7 +4,8 @@ import { useFetch } from "~/hooks/useFetch";
 import { USE_MOCK } from '../services/config';
 import { getUserActivity, getUserMainData } from '../services/api';
 import { getUserActivityMock, getUserMainDataMock } from '../services/mockApi';
-import Header from "../components/header"; 
+import Header from "../components/header";
+import ProfileHeader from '../components/ProfileHeader';
 import DailyActivity from "~/components/DailyActivity";
 import KmAverage from "~/components/KmAverage";
 import ScoreProgress from "~/components/ScoreProgress";
@@ -85,33 +86,15 @@ export default function Dashboard() {
       <div className={styles.contentWrapper}>
 
         {/* Top Header: Branding Logo & Profile Navigation Capsule */}
-       <Header />
+        <Header />
 
-        {/* User Profile Summary Panel */}
-        <section className={styles.profileSection}>
-
-          <div className={styles.profileInfoWrapper}>
-            <div className={styles.profileAvatar}>
-              {firstName[0]}
-            </div>
-            <div>
-              <h1 className={styles.profileName}>
-                {firstName} {lastName}
-              </h1>
-              <p className={styles.profileSub}>Membre depuis le 14 juin 2023</p>
-            </div>
-          </div>
-
-          <div className={styles.profileDistanceWrapper}>
-            <span className={styles.profileTotalDistanceLabel}>Distance totale parcourue</span>
-
-            <div className={styles.profileTotalDistanceButton}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
-              <span className={styles.profileTotalDistanceValue}>{stats.totalDistance || 0} km</span>
-            </div>
-          </div>
-
-        </section>
+        {/* Profile Header:*/}
+        <ProfileHeader
+          firstName={firstName}
+          lastName={lastName}
+          profilePicture={profile.profilePicture || ""}
+          totalDistance={stats.totalDistance}
+        />
 
         {/* Analytics Section - Row 1: Activity & Heart Rate Metrics */}
         <h2 className={styles.sectionTitle}>Vos dernières performances</h2>
@@ -126,32 +109,38 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Analytics Section - Row 2: Weekly Goals Progress & Macro KPI blocks */}
-        <h2 className={styles.sectionTitle}>Cette semaine</h2>
+        {/* --- Analytics Section - Row 2 --- */}
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Cette semaine</h2>
+          <p className={styles.sectionDate}>Du 23/06/2025 au 30/06/2025</p>
+        </div>
+
         <div className={styles.rowContainer}>
+
+          {/* Left-hand map (Donut chart) */}
           <div className={styles.cardLeftBottom}>
-            <div>
-              <h3 className={styles.cardLeftBottomTitle}>
-                Score Global
-              </h3>
-              <p className={styles.cardLeftBottomSubtitle}>Avancement de votre objectif</p>
-            </div>
-            <ScoreProgress score={userScore} total={1} />
+            <ScoreProgress current={4} target={6} />
           </div>
 
+          {/* Right column (The two small cards) */}
           <div className={styles.statsRightContainer}>
+
+            {/* Map 1: Activity Duration */}
             <div className={styles.textStatCard}>
-              <p className={styles.textStatLabel}>Temps Total</p>
-              <p className={styles.textStatValue}>
-                {stats.totalDuration || 0} <span className={styles.textStatUnitBlue}>min</span>
+              <p className={styles.textStatLabel}>Durée d'activité</p>
+              <p className={styles.textStatValueBlue}>
+                140 <span className={styles.unitBlue}>minutes</span>
               </p>
             </div>
+
+            {/* Map 2: Distance */}
             <div className={styles.textStatCard}>
-              <p className={styles.textStatLabel}>Poids Actuel</p>
-              <p className={styles.textStatValue}>
-                {profile.weight || 0} <span className={styles.textStatUnitRed}>kg</span>
+              <p className={styles.textStatLabel}>Distance</p>
+              <p className={styles.textStatValueRed}>
+                21.7 <span className={styles.unitRed}>kilomètres</span>
               </p>
             </div>
+
           </div>
         </div>
 

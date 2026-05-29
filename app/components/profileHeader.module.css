@@ -1,0 +1,63 @@
+.profileSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F8F9FE; /* Ajuste si besoin */
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 40px;
+}
+
+.profileInfoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* LA PHOTO RECTANGULAIRE */
+.profileAvatar {
+  width: 104px;
+  height: 117px;
+  border-radius: 8px;
+  object-fit: cover; 
+}
+
+.profileName {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2B2B2B;
+  margin: 0 0 5px 0;
+}
+
+.profileSub {
+  font-size: 14px;
+  color: #7A7A7A;
+  margin: 0;
+}
+
+.profileDistanceWrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profileTotalDistanceLabel {
+  font-size: 14px;
+  color: #7A7A7A;
+}
+
+.profileTotalDistanceButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: rgba(11, 35, 244, 1); 
+  border-radius: 10px;                  
+  width: 183px;                          
+  height: 90px;                          
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}

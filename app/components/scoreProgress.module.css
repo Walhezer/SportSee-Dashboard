@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.cardHeader {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.titleWrapper {
+  margin-bottom: 5px;
+}
+
+.mainValue {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0038FF; 
+  margin-right: 8px;
+}
+
+.targetValue {
+  font-size: 16px;
+  color: #B2B2B2;
+  font-weight: 500;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #7A7A7A;
+  margin: 0;
+}
+
+.chartWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 450px;
+  height: 342px;
+}
