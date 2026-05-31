@@ -38,6 +38,8 @@ export async function getUserMainData(): Promise<UserProfile> {
   const statsData = source.statistics || source.keyData || {};
   const firstName = profileData.firstName || "Utilisateur";
   const isFemale = ["Sophie", "Emma"].includes(firstName);
+  const duration = statsData.totalDuration || 0;
+  const fallbackCalories = statsData.calories || statsData.calorieCount || (duration * 10);
 
   return {
     profile: {
@@ -54,8 +56,7 @@ export async function getUserMainData(): Promise<UserProfile> {
       totalDistance: statsData.totalDistance || 0,
       totalDuration: statsData.totalDuration || 0,
       totalSessions: statsData.totalSessions || 0,
-      // Fallback sur calorieCount pour gérer l'ancien format si besoin
-      calories: statsData.calories || statsData.calorieCount || 0,
+      calories: fallbackCalories,
       restDays: statsData.restDays || 0,
     }
   };

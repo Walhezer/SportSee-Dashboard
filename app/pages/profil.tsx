@@ -99,10 +99,6 @@ export default function Profil() {
     createdAt
   } = userProfile;
 
-  console.log("1. Objet userProfile complet :", userProfile);
-  console.log("2. Valeur extraite (apiGender) :", apiGender);
-  console.log("3. Type de apiGender :", typeof apiGender);
-
   // Formatted Profile Details
   const age = rawAge ? `${rawAge} ans` : "-- ans";
   const weight = rawWeight ? `${rawWeight}kg` : "Non renseigné";
@@ -184,7 +180,7 @@ export default function Profil() {
               <div className={styles.statCard}>
                 <p className={styles.statLabel}>Temps total couru</p>
                 <p className={styles.statValue}>
-                  27h <span className={styles.statUnit}>15min</span>
+                  {duration.hours}h <span className={styles.statUnit}>{duration.mins}min</span>
                 </p>
               </div>
 
@@ -199,21 +195,21 @@ export default function Profil() {
               <div className={styles.statCard}>
                 <p className={styles.statLabel}>Distance totale parcourue</p>
                 <p className={styles.statValue}>
-                  312 <span className={styles.statUnit}>km</span>
+                  {distance} <span className={styles.statUnit}>km</span>
                 </p>
               </div>
 
               <div className={styles.statCard}>
                 <p style={{ margin: "0 0 16px 0", fontSize: "13px", opacity: 0.9 }}>Nombre de jours de repos</p>
                 <p className={styles.statValue}>
-                  9 <span className={styles.statUnit}>jours</span>
+                  {restDays} <span className={styles.statUnit}>jours</span>
                 </p>
               </div>
 
               <div className={styles.statCard}>
                 <p className={styles.statLabel}>Nombre de sessions</p>
                 <p className={styles.statValue}>
-                  41 <span className={styles.statUnit}>sessions</span>
+                  {sessions} <span className={styles.statUnit}>sessions</span>
                 </p>
               </div>
 
