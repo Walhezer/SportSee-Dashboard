@@ -5,7 +5,6 @@
   background-color: #F8F9FE; /* Ajuste si besoin */
   padding: 20px;
   border-radius: 12px;
-  margin-bottom: 40px;
 }
 
 .profileInfoWrapper {
@@ -23,9 +22,9 @@
 }
 
 .profileName {
-  font-size: 24px;
-  font-weight: 700;
-  color: #2B2B2B;
+  font-size: 22px;
+  font-weight: 500;
+  color: rgba(17, 17, 17, 1);
   margin: 0 0 5px 0;
 }
 

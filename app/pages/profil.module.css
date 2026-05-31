@@ -53,16 +53,22 @@
 
 .columnsContainer {
   display: flex;
-  gap: 32px;
+  gap: 5% ;
   align-items: flex-start;
+  width: 100%;
 }
 
 .leftColumn {
-  flex: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 30px; 
+  /* Au lieu d'une taille fixe, on lui donne un "poids" proportionnel */
+  flex: 47; /* Représente environ 47% de l'espace total (508/1083) */
 }
 
 .rightColumn {
-  flex: 6;
+  /* On lui donne un "poids" légèrement supérieur pour respecter la maquette */
+  flex: 53; /* Représente environ 53% de l'espace total (575/1083) */
 }
 
 .profileInfoBlock {
@@ -74,7 +80,7 @@
 
 .profileInfoTitle {
   font-size: 22px;
-  font-weight: bold;
+  font-weight: 500;
   margin: 0 0 24px 0;
   color: #2B2B2B;
 }
@@ -101,18 +107,26 @@
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: 19px;
 }
 
 .statCard {
-  background-color: #0038FF; /* Fond bleu électrique de la maquette */
-  padding: 24px;
-  border-radius: 12px;
-  color: #FFFFFF;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 100px;
+    background-color: #0038FF;
+    border-radius: 12px;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    /* Tes dimensions fixes */
+    width: 278px;
+    height: 103px;
+    
+    /* 20px en haut/bas, 30px à gauche/droite */
+    padding: 20px 30px;
+    
+    /* Toujours indispensable pour que la carte garde exactement 278x103px */
+    box-sizing: border-box; 
 }
 
 .statLabel {

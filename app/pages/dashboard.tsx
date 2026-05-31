@@ -74,10 +74,18 @@ export default function Dashboard() {
   // Securing access to data from the new API
   const profile = main?.profile || {};
   const stats = main?.statistics || {};
-  const firstName = profile.firstName || "Utilisateur";
-  const lastName = profile.lastName || "";
-  const formattedDistance = stats.totalDistance ? Math.round(Number(stats.totalDistance)) : 0;
-  const pictureUrl = profile.profilePicture || "";
+
+  // 1. Destructuration du profil avec valeurs par défaut
+  const {
+    firstName = "Utilisateur",
+    lastName = "",
+    profilePicture: pictureUrl = "",
+    createdAt
+  } = profile;
+
+  // 2. Destructuration des statistiques
+  const { totalDistance = 0 } = stats;
+  const formattedDistance = totalDistance ? Math.round(Number(totalDistance)) : 0;
 
   // Le nouveau backend ne renvoie plus de score, on fixe une valeur factice pour le graphique
   const userScore = 0.65;
@@ -96,10 +104,13 @@ export default function Dashboard() {
           lastName={lastName}
           profilePicture={pictureUrl}
           totalDistance={formattedDistance}
+          createdAt={profile.createdAt}
         />
 
         {/* Analytics Section - Row 1: Activity & Heart Rate Metrics */}
-        <h2 className={styles.sectionTitle}>Vos dernières performances</h2>
+        <div className={styles.performanceHeader}>
+          <h2 className={styles.sectionTitle}>Vos dernières performances</h2>
+        </div>
         <div className={`${styles.rowContainer} ${styles.mb32}`}>
 
           <div className={styles.cardLeft}>

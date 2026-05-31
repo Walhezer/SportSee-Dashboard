@@ -45,10 +45,13 @@ export default function Profil() {
     return (
       <main className={styles.errorMain}>
         <div className={styles.errorModal}>
-          <h2 className={styles.errorTitle}>Session expirée</h2>
+          <h2 className={styles.errorTitle}>
+            Session expirée
+          </h2>
           <p className={styles.errorText}>
-            Votre session a expiré suite à une période d'inactivité, ou vous n'êtes pas connecté. Veuillez vous reconnecter pour accéder à votre profil.
+            Votre session a expiré suite à une période d'inactivité, ou vous n'êtes pas connecté. Veuillez vous reconnecter pour accéder à votre tableau de bord.
           </p>
+
           <Link to="/" className={styles.errorButton}>
             Retour à la connexion
           </Link>
@@ -83,29 +86,53 @@ export default function Profil() {
   // Safe extraction with fallbacks
   const userProfile = data.profile || {};
   const userStats = data.statistics || {};
-  // Formatted Profile Details
-  const firstName = userProfile.firstName || "Utilisateur";
-  const lastName = userProfile.lastName || "";
-  const profilePicture = userProfile.profilePicture || "";
-  const age = userProfile.age ? `${userProfile.age} ans` : "-- ans";
-  const weight = userProfile.weight ? `${userProfile.weight}kg` : "Non renseigné";
-  const height = formatHeight(userProfile.height);
-  const memberSince = "14 juin 2023"; // Static fallback as per mockup requirements
-  const rawGender = userProfile.gender?.toLowerCase() || "";
 
+  // 1. Destructuration du Profil
+  const {
+    firstName = "Utilisateur",
+    lastName = "",
+    profilePicture = "",
+    age: rawAge,
+    weight: rawWeight,
+    height: rawHeight,
+    gender: apiGender = "",
+    createdAt
+  } = userProfile;
+
+  console.log("1. Objet userProfile complet :", userProfile);
+  console.log("2. Valeur extraite (apiGender) :", apiGender);
+  console.log("3. Type de apiGender :", typeof apiGender);
+
+  // Formatted Profile Details
+  const age = rawAge ? `${rawAge} ans` : "-- ans";
+  const weight = rawWeight ? `${rawWeight}kg` : "Non renseigné";
+  const height = formatHeight(rawHeight);
+
+  // La date dynamique au lieu du texte en dur
+  const memberSince = createdAt
+    ? new Date(createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    : "14 juin 2023";
+
+  const rawGender = apiGender.toLowerCase();
   let gender = "Non renseigné";
   if (rawGender.startsWith("f")) {
     gender = "Femme";
-  }
-  else if (rawGender.startsWith("m") || rawGender.startsWith("h")) {
+  } else if (rawGender.startsWith("m") || rawGender.startsWith("h")) {
     gender = "Homme";
   }
+
+  // 2. Destructuration des Statistiques
+  const {
+    totalDuration,
+    totalDistance = 0,
+    totalSessions: sessions = 0,
+    calories = 0,
+    restDays = 0
+  } = userStats;
+
   // Formatted Global Statistics
-  const duration = formatDuration(userStats.totalDuration);
-  const distance = userStats.totalDistance ? Math.round(Number(userStats.totalDistance)) : 0;
-  const sessions = userStats.totalSessions || 0;
-  const calories = userStats.calories || 0;
-  const restDays = userStats.restDays || 0;
+  const duration = formatDuration(totalDuration);
+  const distance = totalDistance ? Math.round(Number(totalDistance)) : 0;
 
   return (
     <div className={styles.mainContainer}>
@@ -114,19 +141,20 @@ export default function Profil() {
         {/* Top Header: Branding & Navigation */}
         <Header />
 
-        {/* Top Section: User Banner */}
-        <ProfileHeader
-          firstName={firstName || "Utilisateur"}
-          lastName={lastName || ""}
-          profilePicture={profilePicture || ""}
-          showDistance={false}
-        />
-
         {/* Main Body: Two-Column Layout */}
         <div className={styles.columnsContainer}>
 
           {/* Left Column: Personal Information */}
           <section className={styles.leftColumn}>
+
+            {/* Top Section: User Banner */}
+            <ProfileHeader
+              firstName={firstName || "Utilisateur"}
+              lastName={lastName || ""}
+              profilePicture={profilePicture || ""}
+              showDistance={false}
+            />
+
             <div className={styles.profileInfoBlock}>
               <h2 className={styles.profileInfoTitle}>Votre profil</h2>
               <hr style={{ border: "none", height: "1px", backgroundColor: "#EAEAEA", margin: "0 0 20px 0" }} />

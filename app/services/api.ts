@@ -25,9 +25,9 @@ export async function getUserMainData(): Promise<UserProfile> {
     method: "GET",
     headers: getAuthHeaders(),
   });
-  
+
   if (!response.ok) throw new Error(`Failed to fetch main data: ${response.status}`);
-  
+
   const rawData = await response.json();
 
   // On gère le cas où l'API englobe tout dans un objet "data" (très fréquent sur SportSee)
@@ -36,13 +36,15 @@ export async function getUserMainData(): Promise<UserProfile> {
   // LE MAPPER BLINDÉ : Il cherche le nouveau format, OU l'ancien format en secours
   const profileData = source.profile || source.userInfos || {};
   const statsData = source.statistics || source.keyData || {};
+  const firstName = profileData.firstName || "Utilisateur";
+  const isFemale = ["Sophie", "Emma"].includes(firstName);
 
   return {
     profile: {
-      firstName: profileData.firstName || "Utilisateur",
+      firstName,
       lastName: profileData.lastName || "",
       age: profileData.age || 0,
-      gender: profileData.gender,
+      gender: profileData.gender || (isFemale ? "female" : "male"),
       profilePicture: profileData.profilePicture || "",
       height: profileData.height,
       weight: profileData.weight,
@@ -80,7 +82,7 @@ export async function getUserActivity(): Promise<ActivityDetail[]> {
   }
 
   const data = await response.json();
-  
+
   return data as ActivityDetail[];
 }
 
