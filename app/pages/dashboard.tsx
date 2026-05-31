@@ -87,8 +87,10 @@ export default function Dashboard() {
   const { totalDistance = 0 } = stats;
   const formattedDistance = totalDistance ? Math.round(Number(totalDistance)) : 0;
 
-  // Le nouveau backend ne renvoie plus de score, on fixe une valeur factice pour le graphique
-  const userScore = 0.65;
+  const lastWeekActivity = activityData.slice(-7);
+
+ const weeklyDuration = lastWeekActivity.reduce((total, session) => total + (session.duration || 0), 0);
+  const weeklyDistance = lastWeekActivity.reduce((total, session) => total + (session.distance || 0), 0);
 
   return (
     <div className={styles.mainContainer}>
@@ -142,7 +144,7 @@ export default function Dashboard() {
             <div className={styles.textStatCard}>
               <p className={styles.textStatLabel}>Durée d'activité</p>
               <p className={styles.textStatValueBlue}>
-                140 <span className={styles.unitBlue}>minutes</span>
+                {weeklyDuration} <span className={styles.unitBlue}>minutes</span>
               </p>
             </div>
 
@@ -150,7 +152,7 @@ export default function Dashboard() {
             <div className={styles.textStatCard}>
               <p className={styles.textStatLabel}>Distance</p>
               <p className={styles.textStatValueRed}>
-                21.7 <span className={styles.unitRed}>kilomètres</span>
+                {weeklyDistance.toFixed(1)} <span className={styles.unitRed}>kilomètres</span>
               </p>
             </div>
 
