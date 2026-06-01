@@ -318,7 +318,6 @@
   margin: 0 0 15px 0;
 }
 
-/* Valeur en Bleu (140) */
 .textStatValueBlue {
   font-size: 22px;
   font-weight: 700;
@@ -326,15 +325,13 @@
   margin: 0;
 }
 
-/* Valeur en Rouge (21.7) */
 .textStatValueRed {
   font-size: 22px;
   font-weight: 700;
-  color: rgba(244, 50, 11, 1); /* Le rouge de la maquette */
+  color: rgba(244, 50, 11, 1); 
   margin: 0;
 }
 
-/* Unité en bleu clair (minutes) */
 .unitBlue {
   font-size: 16px;
   font-weight: 500;
@@ -342,7 +339,6 @@
   color: rgba(182, 189, 252, 1); 
 }
 
-/* Unité en rouge clair (kilomètres) */
 .unitRed {
   font-size: 16px;
   font-weight: 500;
@@ -396,4 +392,22 @@
 
 .errorButton:hover {
   background-color: #E60000;
+}
+
+.sessionLoading {
+  padding: 40px;
+  text-align: center;
+  color: #0038FF;
+  font-size: 18px;
+}
+
+.apiLoading {
+  padding: 40px;
+  text-align: center;
+}
+
+.apiError {
+  padding: 40px;
+  text-align: center;
+  color: red; 
 }

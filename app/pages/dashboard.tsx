@@ -10,7 +10,7 @@ import ProfileHeader from '../components/ProfileHeader';
 import DailyActivity from "~/components/DailyActivity";
 import KmAverage from "~/components/KmAverage";
 import ScoreProgress from "~/components/ScoreProgress";
-import styles from "./dashboard.module.css"; 
+import styles from "./dashboard.module.css";
 
 /**
  * Dashboard page component for the SportSee application.
@@ -18,15 +18,43 @@ import styles from "./dashboard.module.css";
  * Aligned to desktop layout constraints (min-width: 1024px).
  */
 export default function Dashboard() {
-  const { user, setUser } = useUser();
+  const { user, setUser, isLoading: isSessionLoading } = useUser();
   const navigate = useNavigate();
 
+  // Switch
+  const fetchDashboardData = async () => {
+    if (USE_MOCK) {
+      const main = await getUserMainDataMock();
+      const activity = await getUserActivityMock();
+      return { main, activity };
+    } else {
+      const main = await getUserMainData();
+      const activity = await getUserActivity();
+      return { main, activity };
+    }
+  };
+
+  // Fetch all user metrics using our switch function
+  const { data, isLoading, error } = useFetch(fetchDashboardData, []);
+
+  //logout function
   const handleLogout = () => {
     setUser(null);
     navigate("/");
   };
 
-  // Route guarding: redirect or block access if user session context is missing
+  //A. loading session (local memory)
+  if (isSessionLoading) {
+    return (
+      <main className={styles.errorMain}>
+        <div className={styles.sessionLoading}>
+          Restauration de votre session...
+        </div>
+      </main>
+    );
+  }
+
+  //B. Route guarding: redirect or block access if user session context is missing
   if (!user) {
     return (
       <main className={styles.errorMain}>
@@ -46,25 +74,29 @@ export default function Dashboard() {
     );
   }
 
-  // Switch
-  const fetchDashboardData = async () => {
-    if (USE_MOCK) {
-      const main = await getUserMainDataMock();
-      const activity = await getUserActivityMock();
-      return { main, activity };
-    } else {
-      const main = await getUserMainData();
-      const activity = await getUserActivity();
-      return { main, activity };
-    }
-  };
+  //C. Handle API loading and error states
+  if (isLoading) return <div className={styles.apiLoading}>Chargement de vos indicateurs...</div>;
 
-  // Fetch all user metrics using our switch function
-  const { data, isLoading, error } = useFetch(fetchDashboardData, []);
-
-  // Handle API loading and error states
-  if (isLoading) return <div style={{ padding: "40px", textAlign: "center" }}>Chargement de vos indicateurs...</div>;
-  if (error || !data) return <div style={{ padding: "40px", textAlign: "center", color: "red" }}>Erreur de chargement des données depuis le serveur.</div>;
+  //D. if API return an error
+  if (error || !data) {
+    return (
+      <main className={styles.errorMain}>
+        <div className={styles.errorModal}>
+          <h2 className={styles.errorTitle}>Erreur serveur</h2>
+          <p className={styles.errorText}>
+            Impossible de charger vos données. Le serveur est peut-être indisponible ou votre session n'est plus synchronisée.
+          </p>
+          <button
+            onClick={handleLogout}
+            className={styles.errorButton}
+            style={{ border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
+          >
+            Retour à la connexion
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   // Extract backend data
   const { main, activity } = data;
@@ -90,7 +122,7 @@ export default function Dashboard() {
 
   const lastWeekActivity = activityData.slice(-7);
 
- const weeklyDuration = lastWeekActivity.reduce((total, session) => total + (session.duration || 0), 0);
+  const weeklyDuration = lastWeekActivity.reduce((total, session) => total + (session.duration || 0), 0);
   const weeklyDistance = lastWeekActivity.reduce((total, session) => total + (session.distance || 0), 0);
 
   return (
