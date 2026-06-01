@@ -8,14 +8,13 @@
 .logoArea {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
 }
 
-.logoIcon {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 24px;
+.logoImage {
+  width: 20px;
+  height: 20px;
+  object-fit: contain; 
 }
 
 .logoBarRed1 { width: 4px; height: 12px; background-color: #FF2D00; border-radius: 2px; }

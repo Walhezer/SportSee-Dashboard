@@ -6,7 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-
+import "./global.css";
 import type { Route } from "./+types/root";
 import { UserProvider } from "./context/UserContext";
 

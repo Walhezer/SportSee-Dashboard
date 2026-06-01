@@ -9,6 +9,7 @@ import { getUserMainDataMock } from '../services/mockApi';
 import ProfileHeader from '../components/ProfileHeader';
 import Header from "../components/header";
 import styles from "./profil.module.css";
+import Footer from "../components/Footer"; 
 
 // --- UTILITY FUNCTIONS ---
 // Extracted outside the component to prevent unnecessary re-creations on every render
@@ -219,6 +220,7 @@ export default function Profil() {
         </div>
 
       </div>
+      <Footer />
     </div>
   );
 }

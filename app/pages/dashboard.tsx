@@ -5,11 +5,12 @@ import { USE_MOCK } from '../services/config';
 import { getUserActivity, getUserMainData } from '../services/api';
 import { getUserActivityMock, getUserMainDataMock } from '../services/mockApi';
 import Header from "../components/header";
+import Footer from "../components/Footer";
 import ProfileHeader from '../components/ProfileHeader';
 import DailyActivity from "~/components/DailyActivity";
 import KmAverage from "~/components/KmAverage";
 import ScoreProgress from "~/components/ScoreProgress";
-import styles from "./dashboard.module.css";
+import styles from "./dashboard.module.css"; 
 
 /**
  * Dashboard page component for the SportSee application.
@@ -160,6 +161,7 @@ export default function Dashboard() {
         </div>
 
       </div>
+      <Footer />
     </div >
   );
 }

@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import { useUser } from "~/context/UserContext";
 import styles from "./header.module.css";
+import logo from "../assets/logo.svg";
 
 export default function Header() {
   const { setUser } = useUser();
@@ -8,22 +9,19 @@ export default function Header() {
 
   const handleLogout = () => {
     setUser(null);
-    
+
     if (typeof window !== "undefined") {
       localStorage.removeItem("sportsee_token");
     }
-    
+
     navigate("/");
   };
 
   return (
     <header className={styles.headerTop}>
       <div className={styles.logoArea}>
-        <div className={styles.logoIcon}>
-          <div className={styles.logoBarRed1}></div>
-          <div className={styles.logoBarRed2}></div>
-          <div className={styles.logoBarBlue1}></div>
-          <div className={styles.logoBarBlue2}></div>
+        <div className={styles.logoImage}>
+          <img src={logo} alt="Logo SportSee" />
         </div>
         <span className={styles.logoText}>SPORTSEE</span>
       </div>

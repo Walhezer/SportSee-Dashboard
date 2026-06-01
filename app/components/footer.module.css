@@ -1,0 +1,44 @@
+.footer {
+background-color: #ffffff;
+  width: 100%;
+  padding: 10px 100px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.logoImage {
+  width: 20px;
+  height: 20px;
+  object-fit: contain; 
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+}
+
+.copyright {
+  font-size: 14px;
+  color: #333333;
+  font-weight: 400;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 30px; /* L'espacement entre les liens */
+}
+
+.footerLink {
+  color: #333333;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footerLink:hover {
+  color: #FF0101; /* Le rouge SportSee au survol */
+}

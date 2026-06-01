@@ -1,12 +1,15 @@
 .mainContainer {
   background-color: rgba(242, 243, 255, 1);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   box-sizing: border-box;
   font-family: 'Inter', 'Roboto', Helvetica, Arial, sans-serif;
 }
 
 .contentWrapper {
+  flex: 1;
   max-width: 1024px;
   margin: 0 auto;
   padding: 40px 20px;
