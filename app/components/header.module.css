@@ -17,11 +17,6 @@
   object-fit: contain; 
 }
 
-.logoBarRed1 { width: 4px; height: 12px; background-color: #FF2D00; border-radius: 2px; }
-.logoBarRed2 { width: 4px; height: 20px; background-color: #FF2D00; border-radius: 2px; }
-.logoBarBlue1 { width: 4px; height: 16px; background-color: #0038FF; border-radius: 2px; }
-.logoBarBlue2 { width: 4px; height: 24px; background-color: #0038FF; border-radius: 2px; }
-
 .logoText {
   font-weight: bold;
   font-size: 30px;
@@ -36,7 +31,7 @@
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03);
   display: flex;
   align-items: center;
-  gap: 50px;
+  gap: 40px;
 }
 
 .navLinkActive {

@@ -9,6 +9,7 @@ interface ProfileHeaderProps {
   totalDistance?: number;
   showDistance?: boolean;
   createdAt?: string;
+  variant?: "profile" | "dashboard";
 }
 
 // 2. Retrieve the properties
@@ -18,8 +19,11 @@ export default function ProfileHeader({
   profilePicture,
   totalDistance,
   showDistance = true,
-  createdAt
+  createdAt,
+  variant = "profile"
 }: ProfileHeaderProps) {
+
+  const containerClass = variant === "dashboard" ? styles.dashboardSection : styles.profileSection;
 
   const formattedDate = createdAt
     ? new Date(createdAt).toLocaleDateString('fr-FR', {
@@ -31,7 +35,7 @@ export default function ProfileHeader({
 
 
   return (
-    <section className={styles.profileSection}>
+    <section className={containerClass}>
 
       {/* LEFT BLOCK (Always displayed) */}
       <div className={styles.profileInfoWrapper}>

@@ -108,6 +108,7 @@ export default function Dashboard() {
           profilePicture={pictureUrl}
           totalDistance={formattedDistance}
           createdAt={profile.createdAt}
+          variant="dashboard"
         />
 
         {/* Analytics Section - Row 1: Activity & Heart Rate Metrics */}

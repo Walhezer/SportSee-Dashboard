@@ -2,9 +2,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #F8F9FE; /* Ajuste si besoin */
+  background-color: rgba(255, 255, 255, 1); 
   padding: 20px;
   border-radius: 12px;
+  width: 100%;
+}
+
+.dashboardSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+  padding: 32px 52px;
+  border-radius: 20px;
+  width: 100%; 
 }
 
 .profileInfoWrapper {
