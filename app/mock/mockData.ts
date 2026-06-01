@@ -2,18 +2,19 @@ import type { UserProfile, ActivityDetail } from "../models/types";
 
 export const USER_MAIN_DATA: UserProfile[] = [
   {
-    id: "user123", 
-    userInfos: {
+    profile: {
       firstName: "Sophie",
       lastName: "Martin",
       age: 32,
+      createdAt: "2023-06-14", // Date issue de ta maquette
+      height: 165,
+      weight: 60,
     },
-    todayScore: 0.42, 
-    keyData: {
-      calorieCount: 2500,
-      proteinCount: 150,
-      carbohydrateCount: 280,
-      lipidCount: 80
+    statistics: {
+      totalDistance: 2250,
+      totalDuration: 243,
+      totalSessions: 348,
+      calories: 146250,
     }
   }
 ];
