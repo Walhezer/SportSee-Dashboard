@@ -3,10 +3,18 @@ import { useUser } from "~/context/UserContext";
 import styles from "./header.module.css";
 import logo from "../assets/logo.svg";
 
+/**
+ * Header component containing the application logo and main navigation.
+ * Manages user logout actions.
+ */
 export default function Header() {
   const { setUser } = useUser();
   const navigate = useNavigate();
 
+  /**
+   * Clears the user session, removes authentication tokens,
+   * and redirects to the login page.
+   */
   const handleLogout = () => {
     setUser(null);
 

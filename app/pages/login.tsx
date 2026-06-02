@@ -4,26 +4,29 @@ import { useUser } from "~/context/UserContext";
 import styles from "./login.module.css";
 
 /**
- * Login page component with JWT authentication.
- * Features a split layout with credentials input forms and brand visual accents.
+ * Login page component.
+ * Handles user authentication via JWT and manages form state.
  */
 export default function Login() {
   const navigate = useNavigate();
   const { setUser } = useUser();
 
-  // Form input and UI states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  /**
+   * Handles the login form submission.
+   * Sends credentials to the API, stores tokens, and redirects to the dashboard.
+   * @param {React.FormEvent} e - The form submission event.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError(null);
     setIsSubmitting(true);
 
     try {
-      // 1. Submit credentials to the backend API endpoint
       const response = await fetch("http://localhost:8000/api/login", {
         method: "POST",
         headers: {
@@ -37,22 +40,19 @@ export default function Login() {
       }
 
       const result = await response.json();
-      
-      // Extract token and user ID from the response payload
       const { token, userId } = result;
 
       if (!token) {
         throw new Error("No authentication token received.");
       }
 
-      // 2. Securely store the JWT token for subsequent API calls
+      // Securely store credentials in local storage
       localStorage.setItem("sportsee_token", token);
+      localStorage.setItem("sportsee_userId", userId);
 
-      // 3. Hydrate the global user context with the authenticated ID
-      // Using type assertion to bypass strict interface requirements temporarily
+      // Hydrate global user context
       setUser({ id: userId } as any);
 
-      // Navigate to the secured dashboard
       navigate("/dashboard");
     } catch (err: any) {
       setLoginError(err.message || "An error occurred during login.");
@@ -63,11 +63,8 @@ export default function Login() {
 
   return (
     <div className={styles.splitContainer}>
-
-      {/* Left Panel: Authentication Form */}
+      {/* Authentication Panel */}
       <div className={styles.leftPanel}>
-
-        {/* Branding Area */}
         <div className={styles.logoArea}>
           <div className={styles.logoIcon}>
             <div className={styles.logoBarRed1}></div>
@@ -75,12 +72,9 @@ export default function Login() {
             <div className={styles.logoBarBlue1}></div>
             <div className={styles.logoBarBlue2}></div>
           </div>
-          <span className={styles.logoText}>
-            SPORTSEE
-          </span>
+          <span className={styles.logoText}>SPORTSEE</span>
         </div>
 
-        {/* Form Container */}
         <div className={styles.formWrapper}>
           <h1 className={styles.mainTitle}>
             Transformez<br />vos stats en résultats
@@ -89,7 +83,7 @@ export default function Login() {
 
           <form onSubmit={handleSubmit}>
             {loginError && (
-              <p style={{ color: "#FF013F", marginBottom: "15px", fontSize: "14px" }}>
+              <p className={styles.errorMessage}>
                 {loginError}
               </p>
             )}
@@ -130,11 +124,9 @@ export default function Login() {
 
           <a href="#forgot" className={styles.forgotLink}>Mot de passe oublié ?</a>
         </div>
-
-        <div></div>
       </div>
 
-      {/* Right Panel: Immersive Visual Accent */}
+      {/* Visual Accent Panel */}
       <div className={styles.rightPanel}>
         <div className={styles.infoBubble}>
           <p className={styles.infoText}>
@@ -142,7 +134,6 @@ export default function Login() {
           </p>
         </div>
       </div>
-
     </div>
   );
 }

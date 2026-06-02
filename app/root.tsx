@@ -10,6 +10,9 @@ import "./global.css";
 import type { Route } from "./+types/root";
 import { UserProvider } from "./context/UserContext";
 
+/**
+ * Global links for the application (fonts, global styles).
+ */
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -23,10 +26,12 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-
+/**
+ * Root Layout component defining the base HTML structure.
+ */
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -42,7 +47,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-
+/**
+ * Root Application component.
+ * Wraps the application with necessary context providers.
+ */
 export default function App() {
   return (
     <UserProvider>
@@ -51,17 +59,19 @@ export default function App() {
   );
 }
 
-
+/**
+ * Global Error Boundary to catch unhandled errors.
+ */
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
-  let details = "Une erreur inattendue est survenue.";
+  let details = "An unexpected error occurred.";
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Erreur";
+    message = error.status === 404 ? "404" : "Error";
     details =
       error.status === 404
-        ? "La page demandée est introuvable."
+        ? "The requested page could not be found."
         : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;

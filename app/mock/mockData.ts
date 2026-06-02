@@ -6,7 +6,7 @@ export const USER_MAIN_DATA: UserProfile[] = [
       firstName: "Sophie",
       lastName: "Martin",
       age: 32,
-      createdAt: "2023-06-14", // Date issue de ta maquette
+      createdAt: "2023-06-14", 
       height: 165,
       weight: 60,
     },

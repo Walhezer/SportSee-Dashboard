@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 
 /**
- * Custom hook to execute an asynchronous fetch function with reactive arguments.
- * Manages loading state, error catching, and prevents memory leaks via component unmount checks.
+ * Custom hook to execute an asynchronous fetch function.
+ * Manages loading state, error handling, and prevents race conditions 
+ * or memory leaks if the component unmounts.
+ * * @template T - The type of the data returned by the fetch function.
+ * @template Args - The type of the arguments array.
+ * @param {Function} fetchFunction - The async function to execute.
+ * @param {Args} args - The arguments to pass to the fetch function.
+ * @returns {{ data: T | null, isLoading: boolean, error: string | null }}
  */
 export function useFetch<T, Args extends any[]>(
   fetchFunction: (...args: Args) => Promise<T>,
@@ -18,6 +24,7 @@ export function useFetch<T, Args extends any[]>(
     async function executeFetch() {
       setIsLoading(true);
       setError(null);
+      
       try {
         const result = await fetchFunction(...args);
         if (isMounted) {

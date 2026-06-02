@@ -1,11 +1,18 @@
 import { Link } from "react-router";
+import styles from "./notfound.module.css";
 
+/**
+ * 404 Not Found page component.
+ * Displayed when a user navigates to an undefined route.
+ */
 export default function NotFound() {
   return (
-    <main style={{ textAlign: 'center', marginTop: '100px' }}>
+    <main className={styles.container}>
       <h1>404</h1>
-      <p>Oups ! La page que vous demandez n'existe pas.</p>
-      <Link to="/">Retourner à la page d'accueil</Link>
+      <p>Oops! The page you are looking for does not exist.</p>
+      <Link to="/" className={styles.homeLink}>
+        Return to the home page
+      </Link>
     </main>
   );
 }

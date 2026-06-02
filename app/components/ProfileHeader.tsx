@@ -1,7 +1,9 @@
 import styles from './profileHeader.module.css';
 import tagIcon from '../assets/tag.svg';
 
-// 1. On déclare nos propriétés attendues
+/**
+ * Props for the ProfileHeader component.
+ */
 interface ProfileHeaderProps {
   firstName: string;
   lastName: string;
@@ -12,7 +14,10 @@ interface ProfileHeaderProps {
   variant?: "profile" | "dashboard";
 }
 
-// 2. Retrieve the properties
+/**
+ * Header component displaying the user's avatar, name, and membership date.
+ * Can conditionally render a total distance badge and adapt its layout via the 'variant' prop.
+ */
 export default function ProfileHeader({
   firstName,
   lastName,
@@ -27,17 +32,15 @@ export default function ProfileHeader({
 
   const formattedDate = createdAt
     ? new Date(createdAt).toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    })
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      })
     : "14 juin 2023";
-
 
   return (
     <section className={containerClass}>
 
-      {/* LEFT BLOCK (Always displayed) */}
       <div className={styles.profileInfoWrapper}>
         <img
           src={profilePicture}
@@ -52,7 +55,6 @@ export default function ProfileHeader({
         </div>
       </div>
 
-      {/* RIGHT BLOCK (Displays UNDER CONDITIONS) */}
       {showDistance && (
         <div className={styles.profileDistanceWrapper}>
           <span className={styles.profileTotalDistanceLabel}>Distance totale parcourue</span>

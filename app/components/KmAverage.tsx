@@ -1,20 +1,10 @@
 import { useState, useMemo } from "react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  Legend
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  ResponsiveContainer, Tooltip, Legend
 } from "recharts";
+import type { ActivityDetail } from "../models/types";
 import styles from './kmAverage.module.css';
-
-interface ActivityDetail {
-  date: string;
-  distance: number;
-}
 
 interface KmAverageProps {
   kmData: ActivityDetail[];
@@ -25,12 +15,14 @@ interface KmAverageProps {
  * Includes built-in pagination (4-week blocks) and dynamic stats header.
  */
 export default function KmAverage({ kmData }: KmAverageProps) {
-  // Offset : 0 = les 4 dernières semaines, 1 = les 4 précédentes, etc.
   const [offset, setOffset] = useState(0);
 
-  // Transformation des données et calcul des statistiques (Logique inchangée)
+  /**
+   * Processes activity data to group distances into 4-week blocks.
+   * Calculates the average distance and manages the pagination offset.
+   */
   const chartData = useMemo(() => {
-    if (!kmData || kmData.length === 0) return { weeks: [], average: 0, dateRange: "" };
+    if (!kmData?.length) return { weeks: [], average: 0, dateRange: "", hasMorePast: false };
 
     const sortedData = [...kmData].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -83,62 +75,45 @@ export default function KmAverage({ kmData }: KmAverageProps) {
     };
   }, [kmData, offset]);
 
-  // Fonctions pour les boutons
-  const handlePrev = () => {
-    if (chartData.hasMorePast) setOffset(prev => prev + 1);
-  };
-
-  const handleNext = () => {
-    if (offset > 0) setOffset(prev => prev - 1);
-  };
-
-  // Formateur personnalisé pour la légende Recharts
-  const renderLegend = (value: string) => {
-    return <span style={{ color: '#7A7A7A', fontSize: '14px', marginLeft: '8px' }}>{value}</span>;
-  };
+  const renderLegend = (value: string) => (
+    <span className={styles.legendText}>{value}</span>
+  );
 
   return (
     <div className={styles.container}>
-
-      {/* ─── NOUVELLE STRUCTURE DE L'EN-TÊTE ─── */}
       <div className={styles.header}>
         <div className={styles.topRow}>
           <h2>{chartData.average}km en moyenne</h2>
 
           <div className={styles.dateSelector}>
             <button
-              onClick={handlePrev}
+              onClick={() => { if (chartData.hasMorePast) setOffset(prev => prev + 1); }}
               disabled={!chartData.hasMorePast}
-              className={styles.arrowButton}
-              style={{ opacity: chartData.hasMorePast ? 1 : 0.3 }}
+              className={`${styles.arrowButton} ${!chartData.hasMorePast ? styles.disabled : ''}`}
             >
               &lt;
             </button>
+            
             <span className={styles.dateText}>
               {chartData.dateRange}
             </span>
+            
             <button
-              onClick={handleNext}
+              onClick={() => { if (offset > 0) setOffset(prev => prev - 1); }}
               disabled={offset === 0}
-              className={styles.arrowButton}
-              style={{ opacity: offset === 0 ? 0.3 : 1 }}
+              className={`${styles.arrowButton} ${offset === 0 ? styles.disabled : ''}`}
             >
               &gt;
             </button>
           </div>
         </div>
-
-        {/* Le sous-titre est maintenant positionné en dessous de la ligne principale */}
         <p className={styles.subtitle}>Total des kilomètres 4 dernières semaines</p>
       </div>
 
-      {/* Graphique Recharts aligné sur la maquette */}
       <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData.weeks} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#EAEAEA" />
-
             <XAxis
               dataKey="weekLabel"
               axisLine={{ stroke: '#2B2B2B' }}
@@ -146,7 +121,6 @@ export default function KmAverage({ kmData }: KmAverageProps) {
               tick={{ fill: '#7A7A7A', fontSize: 14 }}
               dy={15}
             />
-
             <YAxis
               axisLine={{ stroke: '#2B2B2B' }}
               tickLine={false}
@@ -154,9 +128,7 @@ export default function KmAverage({ kmData }: KmAverageProps) {
               tickCount={4}
               dx={-10}
             />
-
             <Tooltip cursor={{ fill: '#F8F9FE' }} />
-
             <Legend
               verticalAlign="bottom"
               align="left"
@@ -165,7 +137,6 @@ export default function KmAverage({ kmData }: KmAverageProps) {
               wrapperStyle={{ paddingTop: '20px', paddingLeft: '30px' }}
               formatter={renderLegend}
             />
-
             <Bar
               name="Km"
               dataKey="distance"

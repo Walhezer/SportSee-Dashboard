@@ -1,3 +1,6 @@
+/**
+ * Represents the user's personal information and aggregated statistics.
+ */
 export interface UserProfile {
   profile: {
     firstName: string;
@@ -7,10 +10,10 @@ export interface UserProfile {
     height: number;
     weight: number;
     profilePicture?: string;
-    gender?: string; 
+    gender?: string;
   };
   statistics: {
-    totalDistance: number | string; 
+    totalDistance: number | string;
     totalDuration: number;
     totalSessions: number;
     calories?: number;
@@ -18,12 +21,18 @@ export interface UserProfile {
   };
 }
 
+/**
+ * Represents daily heart rate metrics.
+ */
 export interface HeartRateData {
   min: number;
   max: number;
   average: number;
 }
 
+/**
+ * Represents daily training activity details.
+ */
 export interface ActivityDetail {
   date: string;
   distance: number;

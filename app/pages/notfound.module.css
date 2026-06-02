@@ -1,0 +1,12 @@
+.container {
+  text-align: center;
+  margin-top: 100px;
+  font-family: sans-serif;
+}
+
+.homeLink {
+  color: #0038FF;
+  text-decoration: underline;
+  display: inline-block;
+  margin-top: 20px;
+}

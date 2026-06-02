@@ -1,30 +1,37 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import styles from "./scoreProgress.module.css";
 
-// On passe les valeurs actuelles et l'objectif en propriétés
-export default function ScoreProgress({ current = 4, target = 6 }) {
-  // On calcule automatiquement ce qu'il reste à faire
-  const remaining = target - current;
+interface ScoreProgressProps {
+  current?: number;
+  target?: number;
+}
 
-  // Les données formatées pour Recharts
+/**
+ * Donut chart component displaying the user's weekly goal progress.
+ */
+export default function ScoreProgress({ current = 4, target = 6 }: ScoreProgressProps) {
+  // Prevents negative remaining values if the user exceeds the target
+  const remaining = Math.max(0, target - current);
+
   const data = [
-    { name: "réalisées", value: current, color: "#0038FF" }, // Bleu foncé
-    { name: "restants", value: remaining, color: "#C4CEFF" } // Bleu clair
+    { name: "réalisées", value: current, color: "#0038FF" },
+    { name: "restants", value: remaining, color: "#C4CEFF" }
   ];
 
-  // Fonction sur-mesure pour créer les étiquettes avec le petit point de couleur
+  /**
+   * Custom render function for Recharts pie labels.
+   * Positions text and colored dots outside the donut chart.
+   */
   const renderCustomLabel = ({ cx, cy, midAngle, outerRadius, value, name, fill }: any) => {
     const RADIAN = Math.PI / 180;
-    const radius = outerRadius + 25; // Décale le texte à l'extérieur du cercle
+    const radius = outerRadius + 25;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
     const textAnchor = x > cx ? "start" : "end";
 
     return (
       <g>
-        {/* Le petit point de couleur */}
         <circle cx={x + (textAnchor === "start" ? -10 : 10)} cy={y - 4} r={4} fill={fill} />
-        {/* Le texte */}
         <text x={x} y={y} fill="#7A7A7A" textAnchor={textAnchor} fontSize={13} fontWeight={500}>
           {value} {name}
         </text>
@@ -35,16 +42,14 @@ export default function ScoreProgress({ current = 4, target = 6 }) {
   return (
     <div className={styles.container}>
       
-      {/* L'en-tête textuel personnalisé */}
       <div className={styles.cardHeader}>
         <div className={styles.titleWrapper}>
           <span className={styles.mainValue}>x{current}</span>
           <span className={styles.targetValue}> sur objectif de {target}</span>
         </div>
-        <p className={styles.subtitle}>Courses hebdomadaire réalisées</p>
+        <p className={styles.subtitle}>Courses hebdomadaires réalisées</p>
       </div>
 
-      {/* Le graphique Recharts */}
       <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -52,14 +57,14 @@ export default function ScoreProgress({ current = 4, target = 6 }) {
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={55} // L'épaisseur intérieure (fait l'effet "Donut")
-              outerRadius={85} // La taille totale
+              innerRadius={55}
+              outerRadius={85}
               dataKey="value"
-              startAngle={90}  // Fait démarrer le cercle par le haut
+              startAngle={90}
               endAngle={-270}
-              label={renderCustomLabel} // Appelle notre fonction pour les textes
-              labelLine={false} // Cache la ligne noire par défaut
-              stroke="none" // Enlève la bordure blanche entre les parts
+              label={renderCustomLabel}
+              labelLine={false}
+              stroke="none"
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
@@ -68,7 +73,7 @@ export default function ScoreProgress({ current = 4, target = 6 }) {
           </PieChart>
         </ResponsiveContainer>
       </div>
-
+      
     </div>
   );
 }

@@ -162,3 +162,9 @@
   text-align: center;
   letter-spacing: -0.1px;
 }
+
+.errorMessage {
+  color: #FF013F;
+  margin-bottom: 15px;
+  font-size: 14px;
+}

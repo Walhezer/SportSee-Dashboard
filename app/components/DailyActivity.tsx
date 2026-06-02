@@ -1,14 +1,7 @@
 import { useState, useMemo } from "react";
 import {
-  ComposedChart,
-  Bar,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
+  ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid,
+  Tooltip, Legend, ResponsiveContainer,
 } from "recharts";
 import type { ActivityDetail } from "../models/types";
 import styles from './dailyActivity.module.css';
@@ -25,13 +18,17 @@ export default function DailyActivity({ activityData }: DailyActivityProps) {
   const [offset, setOffset] = useState(0);
 
   const formatDay = (dateString: string) => {
+    // Conservation de l'affichage UI en français
     const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
-    const date = new Date(dateString);
-    return days[date.getDay()];
+    return days[new Date(dateString).getDay()];
   };
 
+  /**
+   * Processes activity data to prepare a 7-day sliding window for the chart.
+   * Calculates the average heart rate and manages pagination offset.
+   */
   const chartDataInfo = useMemo(() => {
-    if (!activityData || activityData.length === 0) {
+    if (!activityData?.length) {
       return { data: [], averageBpm: 0, dateRange: "", hasMorePast: false };
     }
 
@@ -53,50 +50,39 @@ export default function DailyActivity({ activityData }: DailyActivityProps) {
       const currentDay = new Date(startDate.getTime() + (i * 24 * 60 * 60 * 1000));
       const currentDayStr = currentDay.toISOString().split('T')[0];
 
-      const matchingSession = sortedData.find(session => {
-        const sessionDateStr = new Date(session.date).toISOString().split('T')[0];
-        return sessionDateStr === currentDayStr;
-      });
+      const matchingSession = sortedData.find(session =>
+        new Date(session.date).toISOString().split('T')[0] === currentDayStr
+      );
 
       if (matchingSession) {
         fullWeekData.push(matchingSession);
-        if (matchingSession.heartRate && matchingSession.heartRate.average) {
+        if (matchingSession.heartRate?.average) {
           totalBpm += matchingSession.heartRate.average;
           validSessionsCount++;
         }
       } else {
-        fullWeekData.push({
-          date: currentDayStr,
-          heartRate: { min: null, max: null, average: null }
-        });
+        fullWeekData.push({ date: currentDayStr, heartRate: { min: null, max: null, average: null } });
       }
     }
 
     const averageBpm = validSessionsCount > 0 ? Math.round(totalBpm / validSessionsCount) : 0;
-
+    
+    // Conservation du formatage français pour la plage de dates
     const formatOptions: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' };
     const startStr = startDate.toLocaleDateString('fr-FR', formatOptions);
     const endStr = endDate.toLocaleDateString('fr-FR', formatOptions);
 
     return {
-      data: fullWeekData, 
-      averageBpm: averageBpm || 163, 
+      data: fullWeekData,
+      averageBpm: averageBpm || 163,
       dateRange: `${startStr} - ${endStr}`,
       hasMorePast: sortedData[0] && new Date(sortedData[0].date) < startDate
     };
   }, [activityData, offset]);
 
-  const handlePrev = () => {
-    if (chartDataInfo.hasMorePast) setOffset(prev => prev + 1);
-  };
-
-  const handleNext = () => {
-    if (offset > 0) setOffset(prev => prev - 1);
-  };
-
-  // Custom legend render strictly using CSS modules
-const renderLegend = (props: any) => {
+  const renderLegend = (props: any) => {
     const { payload } = props;
+    // Conservation des intitulés français originaux
     const desiredOrder = ['Min', 'Max BPM', 'Max BPM (Suivi)'];
 
     const sortedPayload = payload ? [...payload].sort((a, b) => {
@@ -105,25 +91,17 @@ const renderLegend = (props: any) => {
 
     return (
       <div className={styles.legendContainer}>
-        {sortedPayload.map((entry: any, index: number) => {
-          return (
-            <div key={`item-${index}`} className={styles.legendItem}>
-              <div 
-                className={styles.legendIcon} 
-                style={{ backgroundColor: entry.color }} 
-              />
-              {/* Le texte n'a plus de style en ligne, tout est géré par la classe CSS */}
-              <span className={styles.legendText}>
-                {entry.value}
-              </span>
-            </div>
-          );
-        })}
+        {sortedPayload.map((entry: any, index: number) => (
+          <div key={`item-${index}`} className={styles.legendItem}>
+            <div className={styles.legendIcon} style={{ backgroundColor: entry.color }} />
+            <span className={styles.legendText}>{entry.value}</span>
+          </div>
+        ))}
       </div>
     );
   };
 
-  if (!activityData || activityData.length === 0) return null;
+  if (!activityData?.length) return null;
 
   return (
     <div className={styles.container}>
@@ -132,20 +110,20 @@ const renderLegend = (props: any) => {
           <h2>{chartDataInfo.averageBpm} BPM</h2>
           
           <div className={styles.dateSelector}>
-            <button 
-              onClick={handlePrev}
+            <button
+              onClick={() => setOffset(prev => prev + 1)}
               disabled={!chartDataInfo.hasMorePast}
-              className={styles.arrowButton}
-              style={{ opacity: chartDataInfo.hasMorePast ? 1 : 0.3, cursor: chartDataInfo.hasMorePast ? "pointer" : "not-allowed" }}
+              className={`${styles.arrowButton} ${!chartDataInfo.hasMorePast ? styles.disabled : ''}`}
             >
               &lt;
             </button>
+
             <span className={styles.dateText}>{chartDataInfo.dateRange}</span>
-            <button 
-              onClick={handleNext}
+
+            <button
+              onClick={() => setOffset(prev => prev - 1)}
               disabled={offset === 0}
-              className={styles.arrowButton}
-              style={{ opacity: offset === 0 ? 0.3 : 1, cursor: offset === 0 ? "not-allowed" : "pointer" }}
+              className={`${styles.arrowButton} ${offset === 0 ? styles.disabled : ''}`}
             >
               &gt;
             </button>
@@ -153,7 +131,7 @@ const renderLegend = (props: any) => {
         </div>
         <p className={styles.subtitle}>Fréquence cardiaque moyenne</p>
       </div>
-      
+
       <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartDataInfo.data} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>

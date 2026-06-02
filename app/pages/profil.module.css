@@ -149,3 +149,10 @@
   font-weight: normal;
   opacity: 0.8;
 }
+
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #EAEAEA;
+  margin: 0 0 20px 0;
+}

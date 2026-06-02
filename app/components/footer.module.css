@@ -28,7 +28,7 @@ background-color: #ffffff;
 .rightSection {
   display: flex;
   align-items: center;
-  gap: 30px; /* L'espacement entre les liens */
+  gap: 30px; 
 }
 
 .footerLink {
@@ -40,5 +40,5 @@ background-color: #ffffff;
 }
 
 .footerLink:hover {
-  color: #FF0101; /* Le rouge SportSee au survol */
+  color: #FF0101; 
 }
