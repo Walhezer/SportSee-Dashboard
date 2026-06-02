@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useUser } from "~/context/UserContext";
+import { USE_MOCK } from "../services/config";
 import styles from "./login.module.css";
 
 /**
  * Login page component.
- * Handles user authentication via JWT and manages form state.
+ * Handles user authentication via API or Mock, and manages form state.
  */
 export default function Login() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function Login() {
 
   /**
    * Handles the login form submission.
-   * Sends credentials to the API, stores tokens, and redirects to the dashboard.
+   * Routes to either the mock login simulator or the real API.
    * @param {React.FormEvent} e - The form submission event.
    */
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,23 +28,44 @@ export default function Login() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      let token = "";
+      let userId = "";
 
-      if (!response.ok) {
-        throw new Error("Invalid credentials or server error.");
-      }
+      if (USE_MOCK) {
+        // --- MOCK LOGIN LOGIC ---
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const parsedId = parseInt(username, 10);
+        
+        if (parsedId !== 12 && parsedId !== 18) {
+          throw new Error("Identifiants invalides. Utilisez l'ID 12 ou 18 en mode Mock.");
+        }
 
-      const result = await response.json();
-      const { token, userId } = result;
+        token = "mock_jwt_token_12345";
+        userId = parsedId.toString();
 
-      if (!token) {
-        throw new Error("No authentication token received.");
+      } else {
+        // --- REAL API LOGIN LOGIC ---
+        const response = await fetch("http://localhost:8000/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Identifiants invalides ou erreur serveur.");
+        }
+
+        const result = await response.json();
+        token = result.token;
+        userId = result.userId;
+
+        if (!token) {
+          throw new Error("Aucun jeton d'authentification reçu.");
+        }
       }
 
       // Securely store credentials in local storage
@@ -55,7 +77,7 @@ export default function Login() {
 
       navigate("/dashboard");
     } catch (err: any) {
-      setLoginError(err.message || "An error occurred during login.");
+      setLoginError(err.message || "Une erreur est survenue lors de la connexion.");
     } finally {
       setIsSubmitting(false);
     }
@@ -63,7 +85,6 @@ export default function Login() {
 
   return (
     <div className={styles.splitContainer}>
-      {/* Authentication Panel */}
       <div className={styles.leftPanel}>
         <div className={styles.logoArea}>
           <div className={styles.logoIcon}>
@@ -94,7 +115,6 @@ export default function Login() {
                 type="text"
                 id="username"
                 className={styles.input}
-                placeholder="ex: sophiemartin"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
@@ -126,7 +146,6 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Visual Accent Panel */}
       <div className={styles.rightPanel}>
         <div className={styles.infoBubble}>
           <p className={styles.infoText}>

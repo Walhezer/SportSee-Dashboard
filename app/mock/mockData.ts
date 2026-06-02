@@ -1,14 +1,37 @@
 import type { UserProfile, ActivityDetail } from "../models/types";
 
-export const USER_MAIN_DATA: UserProfile[] = [
+// Note: Si TypeScript souligne 'id' en rouge, c'est qu'il faut l'ajouter 
+// dans ton interface UserProfile dans le fichier types.ts ! (ex: id: number;)
+
+export const USER_MAIN_DATA: (UserProfile & { id: number })[] = [
   {
+    id: 12,
     profile: {
-      firstName: "Sophie",
-      lastName: "Martin",
-      age: 32,
-      createdAt: "2023-06-14", 
+      firstName: "Karl",
+      lastName: "Dovineau",
+      age: 31,
+      createdAt: "2022-04-10", 
+      height: 180,
+      weight: 80,
+      profilePicture: "https://i.pravatar.cc/150?u=karl",
+    },
+    statistics: {
+      totalDistance: 3120,
+      totalDuration: 320,
+      totalSessions: 412,
+      calories: 198000,
+    }
+  },
+  {
+    id: 18,
+    profile: {
+      firstName: "Cecilia",
+      lastName: "Ratorez",
+      age: 34,
+      createdAt: "2023-01-22", 
       height: 165,
       weight: 60,
+      profilePicture: "https://i.pravatar.cc/150?u=cecilia",
     },
     statistics: {
       totalDistance: 2250,
