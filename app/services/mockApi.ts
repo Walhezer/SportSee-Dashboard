@@ -10,7 +10,7 @@ import type { UserProfile, ActivityDetail } from "../models/types";
 export async function getUserMainDataMock(): Promise<UserProfile> {
   const currentUserId = localStorage.getItem("sportsee_userId");
 
-  const matchedUser = USER_MAIN_DATA.find((user: any) => user.id === Number(currentUserId));
+ const matchedUser = USER_MAIN_DATA.find((user: any) => String(user.id) === String(currentUserId));
 
   return matchedUser || USER_MAIN_DATA[0];
 }

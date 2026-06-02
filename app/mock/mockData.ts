@@ -3,12 +3,12 @@ import type { UserProfile, ActivityDetail } from "../models/types";
 // Note: Si TypeScript souligne 'id' en rouge, c'est qu'il faut l'ajouter 
 // dans ton interface UserProfile dans le fichier types.ts ! (ex: id: number;)
 
-export const USER_MAIN_DATA: (UserProfile & { id: number })[] = [
-  {
-    id: 12,
+export const USER_MAIN_DATA: (UserProfile & { id: string })[] = [
+ {
+    id: "user123", 
     profile: {
-      firstName: "Karl",
-      lastName: "Dovineau",
+      firstName: "Sophie",
+      lastName: "Martin",
       age: 31,
       createdAt: "2022-04-10", 
       height: 180,
@@ -22,11 +22,11 @@ export const USER_MAIN_DATA: (UserProfile & { id: number })[] = [
       calories: 198000,
     }
   },
-  {
-    id: 18,
+ {
+    id: "user789", 
     profile: {
-      firstName: "Cecilia",
-      lastName: "Ratorez",
+      firstName: "Emma",
+      lastName: "Leroy",
       age: 34,
       createdAt: "2023-01-22", 
       height: 165,

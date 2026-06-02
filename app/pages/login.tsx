@@ -36,14 +36,15 @@ export default function Login() {
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 500));
         
-        const parsedId = parseInt(username, 10);
-        
-        if (parsedId !== 12 && parsedId !== 18) {
-          throw new Error("Identifiants invalides. Utilisez l'ID 12 ou 18 en mode Mock.");
+        if (username === "user123" || username === "sophiemartin") {
+          userId = "user123";
+        } else if (username === "user789" || username === "emmaleroy") {
+          userId = "user789";
+        } else {
+          throw new Error("Identifiants invalides en mode Mock. Essayez sophiemartin ou emmaleroy.");
         }
 
         token = "mock_jwt_token_12345";
-        userId = parsedId.toString();
 
       } else {
         // --- REAL API LOGIN LOGIC ---
@@ -117,6 +118,7 @@ export default function Login() {
                 className={styles.input}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                placeholder="Ex: sophiemartin ou emmaleroy"
                 required
               />
             </div>
