@@ -13,6 +13,29 @@ import ScoreProgress from "~/components/ScoreProgress";
 import styles from "./dashboard.module.css";
 
 /**
+ * Calculates the week's date range based on the latest activity in the dataset.
+ * @param {any[]} activityData - The array of user activities.
+ * @returns {string} Formatted string "Du [start date] au [end date]".
+ */
+const getWeekRange = (activityData: any[]): string => {
+  if (!activityData || activityData.length === 0) return "Dates indisponibles";
+
+  const lastSession = activityData[activityData.length - 1];
+  const referenceDate = new Date(lastSession.day || lastSession.date);
+
+  const dayOfWeek = referenceDate.getDay() || 7;
+  const startOfWeek = new Date(referenceDate);
+  startOfWeek.setDate(referenceDate.getDate() - dayOfWeek + 1);
+  
+  const endOfWeek = new Date(referenceDate);
+  endOfWeek.setDate(referenceDate.getDate() - dayOfWeek + 7);
+  
+  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  
+  return `Du ${startOfWeek.toLocaleDateString('fr-FR', options)} au ${endOfWeek.toLocaleDateString('fr-FR', options)}`;
+};
+
+/**
  * Dashboard page component.
  * Displays user analytics, activity charts, and performance metrics.
  */
@@ -98,6 +121,7 @@ export default function Dashboard() {
   // Data processing
   const { main, activity } = data;
   const activityData = Array.isArray(activity) ? activity : [];
+  const weekRangeText = getWeekRange(activityData);
   const profile = main?.profile || {};
   const stats = main?.statistics || {};
 
@@ -140,7 +164,8 @@ export default function Dashboard() {
         </div>
 
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Cette semaine</h2>
+         <h2 className={styles.sectionTitle}>Cette semaine</h2>
+          <p className={styles.sectionSubtitle}>{weekRangeText}</p>
         </div>
 
         <div className={styles.rowContainer}>
@@ -149,7 +174,7 @@ export default function Dashboard() {
           </div>
           <div className={styles.statsRightContainer}>
             <div className={styles.textStatCard}>
-              <p className={styles.textStatLabel}>Activity duration</p>
+              <p className={styles.textStatLabel}>Durée d'activité</p>
               <p className={styles.textStatValueBlue}>
                 {weeklyDuration} <span className={styles.unitBlue}>min</span>
               </p>
