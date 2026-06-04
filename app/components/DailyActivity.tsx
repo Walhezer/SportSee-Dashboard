@@ -18,7 +18,6 @@ export default function DailyActivity({ activityData }: DailyActivityProps) {
   const [offset, setOffset] = useState(0);
 
   const formatDay = (dateString: string) => {
-    // Conservation de l'affichage UI en français
     const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
     return days[new Date(dateString).getDay()];
   };
@@ -66,8 +65,6 @@ export default function DailyActivity({ activityData }: DailyActivityProps) {
     }
 
     const averageBpm = validSessionsCount > 0 ? Math.round(totalBpm / validSessionsCount) : 0;
-    
-    // Conservation du formatage français pour la plage de dates
     const formatOptions: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' };
     const startStr = startDate.toLocaleDateString('fr-FR', formatOptions);
     const endStr = endDate.toLocaleDateString('fr-FR', formatOptions);
@@ -108,7 +105,7 @@ export default function DailyActivity({ activityData }: DailyActivityProps) {
       <div className={styles.header}>
         <div className={styles.topRow}>
           <h2>{chartDataInfo.averageBpm} BPM</h2>
-          
+
           <div className={styles.dateSelector}>
             <button
               onClick={() => setOffset(prev => prev + 1)}
@@ -139,9 +136,9 @@ export default function DailyActivity({ activityData }: DailyActivityProps) {
             <XAxis dataKey="date" tickFormatter={formatDay} tickLine={false} axisLine={{ stroke: '#2B2B2B' }} stroke="#7A7A7A" dy={15} style={{ fontSize: "14px", fontFamily: "Inter, sans-serif" }} />
             <YAxis orientation="left" tickLine={false} axisLine={{ stroke: '#2B2B2B' }} stroke="#7A7A7A" domain={[130, 187]} ticks={[130, 145, 160, 187]} dx={-10} style={{ fontSize: "14px", fontFamily: "Inter, sans-serif" }} />
             <Tooltip cursor={{ fill: '#F8F9FE' }} />
-            
+
             <Legend verticalAlign="bottom" align="left" content={renderLegend} />
-            
+
             <Bar name="Min" dataKey="heartRate.min" fill="#FFD5CC" barSize={12} radius={[10, 10, 10, 10]} />
             <Bar name="Max BPM" dataKey="heartRate.max" fill="#FF2D00" barSize={12} radius={[10, 10, 10, 10]} />
             <Line name="Max BPM (Suivi)" type="natural" dataKey="heartRate.average" stroke="#0038FF" strokeWidth={2} dot={{ fill: "#0038FF", r: 4, strokeWidth: 0 }} activeDot={{ r: 6 }} connectNulls={true} />
